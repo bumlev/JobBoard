@@ -21,8 +21,7 @@ class JobSeekersController extends Controller
     // Create a profile
     public function createProfile(Request $request)
     {
-        $currentUser = Sentinel::getUser();
-        $currentUser = User::find($currentUser->id);
+        $currentUser = User::find(Sentinel::getUser()->id);
         $dataValidator  = self::ValidateData($request);
 
         if(gettype($dataValidator) == "object")
@@ -39,41 +38,29 @@ class JobSeekersController extends Controller
             $profile->skills()->attach($skills);
             return $profile;
         } catch (QueryException $e) {
-            echo "This is your profile : ";
+            echo "created Nothing ,  your profile is alredy created : ";
             return $currentUser->profile;
         }
        
     }
 
-
-    // Search jobs
-    public function searchJobs()
+    /// Search jobs 
+    public function searchJobs(Request $request)
     {
-        $skills = [2 ,6 , 17];
-        $jobs = Job::with("skills")->get();
-
-        foreach($jobs as $job)
-        {
-            echo  $job->title.PHP_EOL;
-            $sklls = $job->skills->pluck("id")->toArray();
-            $difference = array_diff($skills, $sklls);
-            if(empty($difference))
-                echo "Jobs that match to your profile".PHP_EOL;
-            else
-                echo "Jobs that doesn't match to your profile".PHP_EOL;
-            echo PHP_EOL;
-        }
-        return;
+        $country = $request->input("country");
+        $title = $request->input("title");
+        $jobs = Job::whereHas('countries' , function($query) use($country){
+            $query->where("name" , $country);
+        })->where("title" , "LIKE" , "%".$title."%")->get();
+        return $jobs;
     }
 
     //Apply a job
     public function applyJob($id)
     {
         $user = User::find(Sentinel::getUser()->id);
-        $job = Job::find($id);
-
         try {
-            $user->appliedJobs()->attach($job->id);
+            $user->appliedJobs()->attach($id);
             return $user->appliedJobs;
         } catch (QueryException $e) {
             return response()->json("You applied that Job");
@@ -98,25 +85,26 @@ class JobSeekersController extends Controller
     // Validate data
     static private function ValidateData($request)
     {
+        $currentUser = Sentinel::getUser();
         $data = [
             "education" => $request->input("education"),
             "level_education_id" => intval($request->input("level")),
             "cv" => $request->input("cv"),
             "cover_letter" => $request->input("cover_letter"),
             "phone" => $request->input("phone"),
-            "user_id" => intval($request->input("user_id")),
+            "user_id" => $currentUser->id,
             "country_id" => intval($request->input("country_id")),
             "skills" => array_map("intval" , $request->input("skills"))     
         ];
 
         $data_rules = [
             "education" => "Required|min:6",
-            "level_education_id" => "Required",
+            "level_education_id" => "Required|not_in:0",
             "cv" => "Required",
             "cover_letter" => "Required",
             "phone" => "Required",
             "user_id" => "Required",
-            "country_id" => "Required",
+            "country_id" => "Required|not_in:0",
             "skills.*" => "Required|not_in:0"
         ];
 

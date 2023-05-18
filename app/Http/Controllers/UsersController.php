@@ -92,8 +92,8 @@ class UsersController extends Controller
     {
         $roles = array_map("intval" , $request->input("roles"));
 
-        /*in_array(Role::IS_SET_ADMIN , $roles) ? 
-        die("you are not allowed to set yourself as admin") : "";*/
+        in_array(Role::IS_SET_ADMIN , $roles) ? 
+        die("you are not allowed to set yourself as admin") : "";
 
         $data = [
             "email" => $request->input("email"),

@@ -30,12 +30,31 @@ class Job extends Model
 
     public function skills()
     {
-        return $this->belongsToMany(Skill::class);
+        return $this->belongsToMany(Skill::class , "job_skill");
     }
 
     public function countries()
     {
         return $this->belongsToMany(Country::class);
+    }
+
+    public function matchProfiles($profiles)
+    {
+        $countries = $this->countries->pluck("name")->toArray();
+        $matchProfiles = [];
+        
+        foreach($profiles as $profile)
+        {
+            $sklls = $profile->skills->pluck("id")->toArray();
+            $skills = $this->skills->pluck("id")->toArray();
+            $difference = array_diff($skills, $sklls);
+            $isPartOf = in_array($profile->country->name , $countries);
+
+            if(empty($difference) && $isPartOf)
+                array_push($matchProfiles , $profile);
+            echo PHP_EOL;
+        }
+        return $matchProfiles;
     }
 
 }

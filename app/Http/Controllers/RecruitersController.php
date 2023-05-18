@@ -3,9 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\Job;
+use App\Models\Profile;
+use App\Models\User;
 use Cartalyst\Sentinel\Laravel\Facades\Sentinel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use PhpParser\Node\Stmt\Return_;
 
 class RecruitersController extends Controller
 {
@@ -43,6 +46,35 @@ class RecruitersController extends Controller
         $job->skills()->attach($skills);
         $job->countries()->attach($countries);
         return $job;
+    }
+
+    // find the right Candidates for a jobs
+    public function findRightCandidates($id)
+    {
+        $job = Job::find($id);
+        $profiles = Profile::with("country")->get();
+        $matchProfiles = $job->matchProfiles($profiles);
+        return $matchProfiles;
+    }
+
+    // Search a Candidate Profile
+    public function searchProfile(Request $request)
+    {
+        $name = $request->input("name");
+        $profiles = Profile::with("user")
+                    ->whereHas("user" , function($query) use($name){
+                        $query->where("first_name", "LIKE" , '%'.$name."%")
+                        ->orWhere("last_name", "LIKE" , '%'.$name."%");
+                    })->get();
+
+        return $profiles;
+    }
+
+    // Get a profile
+    public function getProfile($id)
+    {
+        $profile = Profile::with("user")->find($id);
+        return $profile;
     }
 
     

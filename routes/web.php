@@ -33,10 +33,13 @@ Route::post("/authenticate" , [SessionsController::class , "authenticate"]);
 Route::get('/logout' , [SessionsController::class , "logout"]);
 
 Route::get("/jobs" , [RecruitersController::class , "index"]);
+Route::get("/findRightCandidates/{id}" , [RecruitersController::class , "findRightCandidates"]);
+Route::get("/getProfile/{id}" , [RecruitersController::class , "getProfile"]);
 Route::post("/postJob" , [RecruitersController::class , "postJob"]);
+Route::post("/searchProfile" , [RecruitersController::class , "searchProfile"]);
 
 Route::post("/createProfile" , [JobSeekersController::class , "createProfile"]);
 Route::get("/applyJob/{id}" , [JobSeekersController::class , "applyJob"]);
 Route::get("/appliedJobs" , [JobSeekersController::class , "appliedJobs"]);
 Route::get("saveAppliedJob/{id}" , [JobSeekersController::class , "saveAppliedJob"]);
-Route::get("searchJobs" , [JobSeekersController::class , "searchJobs"]);
+Route::post("searchJobs" , [JobSeekersController::class , "searchJobs"]);
