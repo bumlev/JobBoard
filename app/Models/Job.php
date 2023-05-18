@@ -15,10 +15,12 @@ class Job extends Model
     ];
 
     protected $hidden = [];
+    const SAVE = 1;
+
 
     public function users()
     {
-        return $this->belongsToMany(User::class);
+        return $this->belongsToMany(User::class , "applied_jobs")->withPivot(["save"]);
     }
 
     public function user(){

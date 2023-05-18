@@ -13,4 +13,6 @@ class Role extends SentinelRole
     protected $table = "roles";
     protected $fillable = ["slug" , "name" , "permissions"];
     protected $hidden = [];
+
+    const IS_SET_ADMIN = 1;
 }

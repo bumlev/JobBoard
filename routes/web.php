@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\JobSeekersController;
+use App\Http\Controllers\RecruitersController;
 use App\Http\Controllers\SessionsController;
 use App\Http\Controllers\UsersController;
 use Illuminate\Support\Facades\Route;
@@ -29,3 +31,12 @@ Route::put('/updateUser/{id}' , [UsersController::class , "update"]);
 
 Route::post("/authenticate" , [SessionsController::class , "authenticate"]);
 Route::get('/logout' , [SessionsController::class , "logout"]);
+
+Route::get("/jobs" , [RecruitersController::class , "index"]);
+Route::post("/postJob" , [RecruitersController::class , "postJob"]);
+
+Route::post("/createProfile" , [JobSeekersController::class , "createProfile"]);
+Route::get("/applyJob/{id}" , [JobSeekersController::class , "applyJob"]);
+Route::get("/appliedJobs" , [JobSeekersController::class , "appliedJobs"]);
+Route::get("saveAppliedJob/{id}" , [JobSeekersController::class , "saveAppliedJob"]);
+Route::get("searchJobs" , [JobSeekersController::class , "searchJobs"]);

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Role;
 use App\Models\User;
 use App\Repositories\Interfaces\UserRepositoriesInterface;
 use Cartalyst\Sentinel\Laravel\Facades\Sentinel;
@@ -15,9 +16,9 @@ class UsersController extends Controller
 
     public function __construct(UserRepositoriesInterface $userRepositoryInterface)
     {
-        $this->middleware('sentinel');
-        $this->middleware('allpermissions:index', ['only' => 'index']);
-        $this->middleware('allpermissions:show', ['only' => 'show']);
+        $this->middleware('sentinel')->except(["store" , "update"]);
+        $this->middleware('allpermissions:users.index', ['only' => 'index']);
+        $this->middleware('allpermissions:users.show', ['only' => 'show']);
         $this->userRepositoryInterface = $userRepositoryInterface;
     }
 
@@ -43,12 +44,11 @@ class UsersController extends Controller
 
         try {
             $user = Sentinel::registerAndActivate($dataValidator);
+            $user->roles()->attach($roles);
+            return $user;   
         } catch (QueryException $e) {
             return response()->json( "The Email already exists !");
-        }
-    
-        $user->roles()->attach($roles);
-        return $user;       
+        }    
     }
 
     // Find a user 
@@ -74,11 +74,11 @@ class UsersController extends Controller
 
         try {
             Sentinel::update($user , $dataValidator);
+            $user->roles()->sync($roles);
+            return $user;
         } catch (QueryException $e) {
             return response()->json( "The Email already exists !");
         }
-        $user->roles()->sync($roles);
-        return $user;
     }
 
     // Get Users
@@ -90,12 +90,17 @@ class UsersController extends Controller
     // Validate data
     static private function ValidateData($request)
     {
+        $roles = array_map("intval" , $request->input("roles"));
+
+        /*in_array(Role::IS_SET_ADMIN , $roles) ? 
+        die("you are not allowed to set yourself as admin") : "";*/
+
         $data = [
             "email" => $request->input("email"),
             "password" => $request->input("password"),
             "first_name" => $request->input("first_name"),
             "last_name" => $request->input("last_name"),
-            "roles" => array_map("intval" , $request->input("roles"))
+            "roles" => $roles
         ];
 
         $data_rules = [

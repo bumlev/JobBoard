@@ -24,7 +24,7 @@ class Profile extends Model
         return $this->belongsTo(Country::class);
     }
 
-    public function slills()
+    public function skills()
     {
         return $this->belongsToMany(Skill::class);
     }
