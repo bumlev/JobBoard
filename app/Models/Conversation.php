@@ -10,7 +10,8 @@ class Conversation extends Model
     use HasFactory;
 
     protected $table = "conversations";
-    protected $fillable = ["user_id1" , "user_id2"];
+    
+    protected $fillable = ["sender_id" , "receiver_id"];
 
     protected $hidden = [];
 

@@ -52,6 +52,7 @@ class JobSeekersController extends Controller
         $jobs = Job::whereHas('countries' , function($query) use($country){
             $query->where("name" , $country);
         })->where("title" , "LIKE" , "%".$title."%")->get();
+
         return $jobs;
     }
 
@@ -60,7 +61,7 @@ class JobSeekersController extends Controller
     {
         $user = User::find(Sentinel::getUser()->id);
         try {
-            $user->appliedJobs()->attach($id);
+            $user->appliedJobs()->attach(intval($id));
             return $user->appliedJobs;
         } catch (QueryException $e) {
             return response()->json("You applied that Job");

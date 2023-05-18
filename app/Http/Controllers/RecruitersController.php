@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Conversation;
 use App\Models\Job;
 use App\Models\Profile;
 use App\Models\User;
 use Cartalyst\Sentinel\Laravel\Facades\Sentinel;
+use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
-use PhpParser\Node\Stmt\Return_;
 
 class RecruitersController extends Controller
 {
@@ -49,7 +50,7 @@ class RecruitersController extends Controller
     }
 
     // find the right Candidates for a jobs
-    public function findRightCandidates($id)
+    public function findRightCandidate($id)
     {
         $job = Job::find($id);
         $profiles = Profile::with("country")->get();
@@ -77,6 +78,19 @@ class RecruitersController extends Controller
         return $profile;
     }
 
+    /// chat with a candidate
+    public function chatWithCandidate(Request $request)
+    {
+        $currentUser = Sentinel::getUser();
+        $receiver_id = intval($request->input("receiver"));
+        $data = [
+            "sender_id" => $currentUser->id,
+            "receiver_id" => $receiver_id
+        ];
+
+      return $data;
+    }
+
     
     // Validate data
     static private function ValidateData($request)
@@ -98,5 +112,11 @@ class RecruitersController extends Controller
         ];
 
         return Validator::make($data , $data_rules)->fails() ? Validator::make($data , $data_rules):$data;
+    }
+
+    // Create a conversation
+    static public function createChat($data)
+    {
+        
     }
 }

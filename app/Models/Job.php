@@ -41,18 +41,17 @@ class Job extends Model
     public function matchProfiles($profiles)
     {
         $countries = $this->countries->pluck("name")->toArray();
+        $skills = $this->skills->pluck("id")->toArray();
         $matchProfiles = [];
         
         foreach($profiles as $profile)
         {
             $sklls = $profile->skills->pluck("id")->toArray();
-            $skills = $this->skills->pluck("id")->toArray();
             $difference = array_diff($skills, $sklls);
             $isPartOf = in_array($profile->country->name , $countries);
 
             if(empty($difference) && $isPartOf)
                 array_push($matchProfiles , $profile);
-            echo PHP_EOL;
         }
         return $matchProfiles;
     }
