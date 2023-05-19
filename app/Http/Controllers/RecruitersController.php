@@ -85,35 +85,29 @@ class RecruitersController extends Controller
         $currentUser = Sentinel::getUser();
         $data = [
             "sender_id" => $currentUser->id,
-            "receiver_id" => intval($request->input("receiver"))
+            "receiver_id" => intval($request->input("receiver")),
+            "content" => $request->input("content")
         ];
         
         $data_rules = [
-            "sender_id" => "Required",
-            "receiver_id" => "Required|not_in:0"
+            "receiver_id" => "Required|not_in:0",
+            "content" => "Required"
         ];
 
         $dataValidator = Validator::make($data , $data_rules); 
         if($dataValidator->fails())
             return $dataValidator->errors();
 
+        $content = $data["content"];
+        unset($data["content"]);
 
         $conversation = self::createChat($data , $id);
 
         $data = [
             "user_id" => $currentUser->id,
             "conversation_id" => intval($conversation->id),
-            "content" => $request->input("content")
+            "content" => $content
         ];
-        $data_rules = [
-            "conversation_id" => "Required|not_in:0",
-            "content" => "Required"
-        ];
-
-        $dataValidator = Validator::make($data, $data_rules);
-
-        if($dataValidator->fails())
-            return $dataValidator->errors();
         
         $message = Message::create($data);
         return Message::with("user" , "conversation")->get();
@@ -144,7 +138,7 @@ class RecruitersController extends Controller
     }
 
     // Create a conversation
-    static public function createChat($data , $id)
+    static private function createChat($data , $id)
     {
         $conversation = Conversation::whereIn("sender_id" , $data)
                                     ->whereIn("receiver_id" , $data)->first();
