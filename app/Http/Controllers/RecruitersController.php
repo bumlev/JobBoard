@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Conversation;
 use App\Models\Job;
+use App\Models\Message;
 use App\Models\Profile;
 use App\Models\User;
 use Cartalyst\Sentinel\Laravel\Facades\Sentinel;
@@ -79,16 +80,44 @@ class RecruitersController extends Controller
     }
 
     /// chat with a candidate
-    public function chatWithCandidate(Request $request)
+    public function chatWithCandidate(Request $request , $id)
     {
         $currentUser = Sentinel::getUser();
-        $receiver_id = intval($request->input("receiver"));
         $data = [
             "sender_id" => $currentUser->id,
-            "receiver_id" => $receiver_id
+            "receiver_id" => intval($request->input("receiver"))
+        ];
+        
+        $data_rules = [
+            "sender_id" => "Required",
+            "receiver_id" => "Required|not_in:0"
         ];
 
-      return $data;
+        $dataValidator = Validator::make($data , $data_rules); 
+        if($dataValidator->fails())
+            return $dataValidator->errors();
+
+
+        $conversation = self::createChat($data , $id);
+
+        $data = [
+            "user_id" => $currentUser->id,
+            "conversation_id" => intval($conversation->id),
+            "content" => $request->input("content")
+        ];
+        $data_rules = [
+            "conversation_id" => "Required|not_in:0",
+            "content" => "Required"
+        ];
+
+        $dataValidator = Validator::make($data, $data_rules);
+
+        if($dataValidator->fails())
+            return $dataValidator->errors();
+        
+        $message = Message::create($data);
+        return Message::with("user" , "conversation")->get();
+
     }
 
     
@@ -115,8 +144,18 @@ class RecruitersController extends Controller
     }
 
     // Create a conversation
-    static public function createChat($data)
+    static public function createChat($data , $id)
     {
-        
+        $conversation = Conversation::whereIn("sender_id" , $data)
+                                    ->whereIn("receiver_id" , $data)->first();
+        if(empty($conversation))
+        {
+            $conversation = Conversation::create($data);
+            return $conversation;
+        }
+        else
+        {
+            return Conversation::with("messages")->find(intval($id));
+        }
     }
 }

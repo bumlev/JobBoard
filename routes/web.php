@@ -35,7 +35,7 @@ Route::get('/logout' , [SessionsController::class , "logout"]);
 Route::get("/jobs" , [RecruitersController::class , "index"]);
 Route::get("/findRightCandidates/{id}" , [RecruitersController::class , "findRightCandidates"]);
 Route::get("/getProfile/{id}" , [RecruitersController::class , "getProfile"]);
-Route::post("/chatWithCandidate" , [RecruitersController::class , "chatWithCandidate"]);
+Route::post("/chatWithCandidate/{id}" , [RecruitersController::class , "chatWithCandidate"]);
 Route::post("/postJob" , [RecruitersController::class , "postJob"]);
 Route::post("/searchProfile" , [RecruitersController::class , "searchProfile"]);
 
