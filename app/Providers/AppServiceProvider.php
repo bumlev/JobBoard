@@ -2,8 +2,6 @@
 
 namespace App\Providers;
 
-use App\Repositories\Classes\UserRepositories;
-use App\Repositories\Interfaces\UserRepositoriesInterface;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -25,6 +23,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-
+        
     }
 }

@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Role;
 use App\Models\User;
-use App\Repositories\Interfaces\UserRepositoriesInterface;
 use Cartalyst\Sentinel\Laravel\Facades\Sentinel;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
@@ -14,12 +13,12 @@ class UsersController extends Controller
 {
     protected $userRepositoryInterface;
 
-    public function __construct(UserRepositoriesInterface $userRepositoryInterface)
+    public function __construct()
     {
         $this->middleware('sentinel')->except(["store" , "update"]);
         $this->middleware('allpermissions:users.index', ['only' => 'index']);
         $this->middleware('allpermissions:users.show', ['only' => 'show']);
-        $this->userRepositoryInterface = $userRepositoryInterface;
+        //$this->userRepositoryInterface = $userRepositoryInterface;
     }
 
     //Display all Users
@@ -80,13 +79,7 @@ class UsersController extends Controller
             return response()->json( "The Email already exists !");
         }
     }
-
-    // Get Users
-    public function execute()
-    {
-        return $this->userRepositoryInterface::getUsers();
-    }
-
+    
     // Validate data
     static private function ValidateData($request)
     {

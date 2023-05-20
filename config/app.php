@@ -179,7 +179,6 @@ return [
         //Added Service Providers
         Laracasts\Flash\FlashServiceProvider::class,
         Cartalyst\Sentinel\Laravel\SentinelServiceProvider::class,
-        App\Providers\Repositories\UserRepositoryServiceProvider::class
     ],
 
     /*

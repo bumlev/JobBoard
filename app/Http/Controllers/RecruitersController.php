@@ -7,26 +7,40 @@ use App\Models\Job;
 use App\Models\Message;
 use App\Models\Profile;
 use App\Models\User;
+use App\Repositories\Factories\JobsFactoriesInterface;
 use Cartalyst\Sentinel\Laravel\Facades\Sentinel;
-use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
 class RecruitersController extends Controller
-{
-    
+{  
+    //protected $jobsFactoriesInterface;
     public function __construct()
     {
         $this->middleware("sentinel");
         $this->middleware("allpermissions:jobs.index" , ["only" => "index"]);
         $this->middleware("allpermissions:jobs.postJob" , ["only" => "postJob"]);
+        //$this->jobsFactoriesInterface = $jobsFactoriesInterface->make();
     }
 
     // Display all avalaible jobs
     public function index()
     {
-        $jobs = Job::with("skills" , "countries")->get();
-        return $jobs;
+       if(Sentinel::getUser()->inRole("Admin")){
+
+            $jobs = Job::with('users')->get();
+
+            foreach($jobs as $job)
+            {
+                print_r($job->profile);
+            }
+            return ;   
+       }elseif(Sentinel::getUser()->inRole("Recruiter")){
+
+            $user = User::find(Sentinel::getUser()->id);
+            $jobs = $user->publishedJobs;
+            return $jobs;
+       }
     }
 
     //post a job openings
@@ -51,10 +65,10 @@ class RecruitersController extends Controller
     }
 
     // find the right Candidates for a jobs
-    public function findRightCandidate($id)
+    public function findRightCandidates($id)
     {
         $job = Job::find($id);
-        $profiles = Profile::with("country")->get();
+        $profiles = Profile::all();
         $matchProfiles = $job->matchProfiles($profiles);
         return $matchProfiles;
     }
@@ -105,7 +119,7 @@ class RecruitersController extends Controller
 
         $data = [
             "user_id" => $currentUser->id,
-            "conversation_id" => intval($conversation->id),
+            "conversation_id" => $conversation->id,
             "content" => $content
         ];
         
@@ -149,7 +163,7 @@ class RecruitersController extends Controller
         }
         else
         {
-            return Conversation::with("messages")->find(intval($id));
+            return Conversation::with("messages")->find($id);
         }
     }
 }
