@@ -53,16 +53,21 @@ class JobSeekersController extends Controller
             $query->where("name" , $country);
         })->where("title" , "LIKE" , "%".$title."%")->get();
 
-        return $jobs;
+        return empty(json_decode($jobs)) ? "No jobs found" : $jobs;
     }
 
     //Apply a job
     public function applyJob($id)
     {
         $user = User::find(Sentinel::getUser()->id);
+        $profile = $user->profile;
+
+        if(empty(json_decode($profile)))
+            return response()->json("First create your profile");
+
         try {
-            $user->appliedJobs()->attach(intval($id));
-            return $user->appliedJobs;
+            $profile->appliedJobs()->attach(intval($id));
+            return $profile->appliedJobs;
         } catch (QueryException $e) {
             return response()->json("You applied that Job");
         }     
@@ -71,16 +76,25 @@ class JobSeekersController extends Controller
     // Display all jobs you applied jobs
     public function appliedJobs(){
         $user = User::find(Sentinel::getUser()->id);
-        $appliedJobs = $user->appliedJobs;
+        $profile = $user->profile;
+
+        if(empty(json_decode($profile)))
+            return response()->json("First create your profile");
+
+        $appliedJobs = $profile->appliedJobs;
         return $appliedJobs;
     }
 
     // Save a Job
     public function saveAppliedJob($id)
     {
-        $user = User::find(Sentinel::getUser()->id);
-        $user->appliedJobs()->updateExistingPivot($id, ["save" => Job::SAVE]);
-        return $user->appliedJobs;
+        $user = User::with("profile")->find(Sentinel::getUser()->id);
+        $profile = $user->profile;
+        if(empty(json_decode($profile)))
+            return response()->json("First create your profile");
+            
+        $profile->appliedJobs()->updateExistingPivot(intval($id), ["save" => Job::SAVE]);
+        return $profile->appliedJobs;
     }
 
     // Validate data

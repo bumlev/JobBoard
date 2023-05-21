@@ -28,4 +28,9 @@ class Profile extends Model
     {
         return $this->belongsToMany(Skill::class);
     }
+
+    public function appliedJobs()
+    {
+        return $this->belongsToMany(Job::class , "applied_jobs")->withPivot(["save"]);
+    }
 }

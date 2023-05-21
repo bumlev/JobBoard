@@ -26,15 +26,13 @@ class RecruitersController extends Controller
     // Display all avalaible jobs
     public function index()
     {
+        /*$jobs = $this->jobsFactoriesInterface->allJobs();
+        return $jobs;*/
+
        if(Sentinel::getUser()->inRole("Admin")){
 
             $jobs = Job::with('users')->get();
-
-            foreach($jobs as $job)
-            {
-                print_r($job->profile);
-            }
-            return ;   
+            return $jobs;   
        }elseif(Sentinel::getUser()->inRole("Recruiter")){
 
             $user = User::find(Sentinel::getUser()->id);
@@ -89,7 +87,7 @@ class RecruitersController extends Controller
     // Get a profile
     public function getProfile($id)
     {
-        $profile = Profile::with("user")->find($id);
+        $profile = Profile::with("user" , "skills")->find($id);
         return $profile;
     }
 

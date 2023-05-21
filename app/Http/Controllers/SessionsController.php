@@ -16,7 +16,7 @@ class SessionsController extends Controller
             "password" => $request->input("password")
         ];
         $authenticate = Sentinel::authenticate($data); 
-        return $authenticate ? response()->json($authenticate) : "Your password or email is incorrect";
+        return $authenticate ? $authenticate : "Your password or email is incorrect";
     }
 
     // Logout

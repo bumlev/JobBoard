@@ -18,9 +18,14 @@ class Job extends Model
     const SAVE = 1;
 
 
-    public function users()
+    /*public function users()
     {
         return $this->belongsToMany(User::class , "applied_jobs")->withPivot(["save"]);
+    }*/
+
+    public function profiles()
+    {
+        return $this->belongsToMany(Profile::class , "applied_jobs")->withPivot(["save"]);
     }
 
     public function user(){

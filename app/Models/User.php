@@ -3,12 +3,13 @@
 namespace App\Models;
 
 use Cartalyst\Sentinel\Users\EloquentUser;
+use Illuminate\Auth\Authenticatable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Notifications\Notifiable;
 
 class User extends EloquentUser
 {
-    use HasFactory, Notifiable;
+    use HasFactory, Notifiable , Authenticatable;
 
     /**
      * The attributes that are mass assignable.
@@ -45,10 +46,10 @@ class User extends EloquentUser
         return $this->hasMany(Job::class);
     }
 
-    public function appliedJobs()
+    /*public function appliedJobs()
     {
         return $this->belongsToMany(Job::class , "applied_jobs")->withPivot(["save"]);
-    }
+    }*/
 
     public function profile()
     {
