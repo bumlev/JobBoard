@@ -46,7 +46,7 @@ class UsersController extends Controller
             $user->roles()->attach($roles);
             return $user;   
         } catch (QueryException $e) {
-            return response()->json( "The Email already exists !");
+            return response("The Email already exists !");
         }    
     }
 

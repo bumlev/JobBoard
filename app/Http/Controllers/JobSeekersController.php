@@ -15,6 +15,8 @@ class JobSeekersController extends Controller
     {
         $this->middleware("sentinel");
         $this->middleware("allpermissions:jobs.createProfile" , ["only" => "createProfile"]);
+        $this->middleware("allpermissions:jobs.applyJob" , ["only" => "applyJob"]);
+        $this->middleware("allpermissions:jobs.appliedJobs" , ["only" => "appliedJobs"]);
         $this->middleware("allpermissions:jobs.saveAppliedJob" , ["only" => "saveAppliedJob"]);
     }
 
@@ -32,13 +34,13 @@ class JobSeekersController extends Controller
 
         $skills = $dataValidator["skills"];
         unset($dataValidator["skills"]);
-
+        
         try {
             $profile  = $currentUser->profile()->create($dataValidator);
             $profile->skills()->attach($skills);
             return $profile;
         } catch (QueryException $e) {
-            echo "created Nothing ,  your profile is alredy created : ";
+            echo "Your profile is alredy exists : ";
             return $currentUser->profile;
         }
        
@@ -103,7 +105,7 @@ class JobSeekersController extends Controller
         $currentUser = Sentinel::getUser();
         $data = [
             "education" => $request->input("education"),
-            "level_education_id" => intval($request->input("level")),
+            "degree_id" => intval($request->input("level")),
             "cv" => $request->input("cv"),
             "cover_letter" => $request->input("cover_letter"),
             "phone" => $request->input("phone"),
@@ -114,7 +116,7 @@ class JobSeekersController extends Controller
 
         $data_rules = [
             "education" => "Required|min:6",
-            "level_education_id" => "Required|not_in:0",
+            "degree_id" => "Required|not_in:0",
             "cv" => "Required",
             "cover_letter" => "Required",
             "phone" => "Required",

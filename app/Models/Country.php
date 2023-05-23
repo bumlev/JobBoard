@@ -16,7 +16,7 @@ class Country extends Model
 
     public function jobs()
     {
-        return $this->belongsToMany(Job::class);
+        return $this->belongsToMany(Job::class , "jobs_countries");
     }
 
     public function profiles()

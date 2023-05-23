@@ -9,7 +9,7 @@ use Illuminate\Notifications\Notifiable;
 
 class User extends EloquentUser
 {
-    use HasFactory, Notifiable , Authenticatable;
+    use HasFactory, Notifiable;
 
     /**
      * The attributes that are mass assignable.

@@ -35,12 +35,12 @@ class Job extends Model
 
     public function skills()
     {
-        return $this->belongsToMany(Skill::class , "job_skill");
+        return $this->belongsToMany(Skill::class , "jobs_skills");
     }
 
     public function countries()
     {
-        return $this->belongsToMany(Country::class);
+        return $this->belongsToMany(Country::class , "jobs_countries");
     }
 
     public function matchProfiles($profiles)

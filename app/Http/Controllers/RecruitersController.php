@@ -20,6 +20,7 @@ class RecruitersController extends Controller
         $this->middleware("sentinel");
         $this->middleware("allpermissions:jobs.index" , ["only" => "index"]);
         $this->middleware("allpermissions:jobs.postJob" , ["only" => "postJob"]);
+        $this->middleware("allpermissions:jobs.rightCandidates" , ["only" => "findRightCandidates"]);
         //$this->jobsFactoriesInterface = $jobsFactoriesInterface->make();
     }
 
@@ -29,16 +30,8 @@ class RecruitersController extends Controller
         /*$jobs = $this->jobsFactoriesInterface->allJobs();
         return $jobs;*/
 
-       if(Sentinel::getUser()->inRole("Admin")){
-
-            $jobs = Job::with('users')->get();
-            return $jobs;   
-       }elseif(Sentinel::getUser()->inRole("Recruiter")){
-
-            $user = User::find(Sentinel::getUser()->id);
-            $jobs = $user->publishedJobs;
-            return $jobs;
-       }
+       $jobs = Job::all();
+       return $jobs;
     }
 
     //post a job openings

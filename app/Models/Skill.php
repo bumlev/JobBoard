@@ -15,11 +15,11 @@ class Skill extends Model
 
     public function jobs()
     {
-        return $this->belongsToMany(Job::class , "job_skill");
+        return $this->belongsToMany(Job::class , "jobs_skills");
     }
 
     public function profiles()
     {
-        return $this->belongsToMany(Profile::class);
+        return $this->belongsToMany(Profile::class , "profile_skills");
     }
 }

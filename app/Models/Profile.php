@@ -10,7 +10,7 @@ class Profile extends Model
     use HasFactory;
 
     protected $table = "profiles";
-    protected $fillable = ["education" , "level_education_id" , "cv" , "cover_letter" , "phone" , "user_id" , "country_id"];
+    protected $fillable = ["education" , "degree_id" , "cv" , "cover_letter" , "phone" , "user_id" , "country_id"];
 
     protected $hidden = [];
 
@@ -26,7 +26,7 @@ class Profile extends Model
 
     public function skills()
     {
-        return $this->belongsToMany(Skill::class);
+        return $this->belongsToMany(Skill::class , "profile_skills");
     }
 
     public function appliedJobs()
