@@ -138,7 +138,6 @@ class RecruitersController extends Controller
             "skills.*" => "Required|not_in:0",
             "countries.*" => "Required|not_in:0"
         ];
-
         return Validator::make($data , $data_rules)->fails() ? Validator::make($data , $data_rules):$data;
     }
 

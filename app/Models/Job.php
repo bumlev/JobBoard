@@ -16,16 +16,11 @@ class Job extends Model
 
     protected $hidden = [];
     const SAVE = 1;
-
-
-    /*public function users()
-    {
-        return $this->belongsToMany(User::class , "applied_jobs")->withPivot(["save"]);
-    }*/
+    const APPLY = 1;
 
     public function profiles()
     {
-        return $this->belongsToMany(Profile::class , "applied_jobs")->withPivot(["save"]);
+        return $this->belongsToMany(Profile::class , "applied_jobs")->withPivot(["save" , "apply"]);
     }
 
     public function user(){

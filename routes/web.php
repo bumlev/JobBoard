@@ -22,10 +22,9 @@ Route::get('/', function () {
 });
 
 Route::get('/users' , [UsersController::class , "index"]);
-Route::get("/users/{id}" , [UsersController::class , "show"]);
 Route::get('/user/{id}' , [UsersController::class , "show"]);
 Route::post('/create_user' , [UsersController::class , "store"]);
-Route::put('/updateUser/{id}' , [UsersController::class , "update"]);
+Route::put('/updateUser' , [UsersController::class , "update"]);
 
 
 Route::post("/authenticate" , [SessionsController::class , "authenticate"]);
@@ -42,5 +41,5 @@ Route::post("/searchProfile" , [RecruitersController::class , "searchProfile"]);
 Route::post("/createProfile" , [JobSeekersController::class , "createProfile"]);
 Route::get("/applyJob/{id}" , [JobSeekersController::class , "applyJob"]);
 Route::get("/appliedJobs" , [JobSeekersController::class , "appliedJobs"]);
-Route::get("saveAppliedJob/{id}" , [JobSeekersController::class , "saveAppliedJob"]);
+Route::get("saveJob/{id}" , [JobSeekersController::class , "saveJob"]);
 Route::post("searchJobs" , [JobSeekersController::class , "searchJobs"]);

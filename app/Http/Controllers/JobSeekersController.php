@@ -17,7 +17,7 @@ class JobSeekersController extends Controller
         $this->middleware("allpermissions:jobs.createProfile" , ["only" => "createProfile"]);
         $this->middleware("allpermissions:jobs.applyJob" , ["only" => "applyJob"]);
         $this->middleware("allpermissions:jobs.appliedJobs" , ["only" => "appliedJobs"]);
-        $this->middleware("allpermissions:jobs.saveAppliedJob" , ["only" => "saveAppliedJob"]);
+        $this->middleware("allpermissions:jobs.saveJob" , ["only" => "saveJob"]);
     }
 
     // Create a profile
@@ -34,7 +34,7 @@ class JobSeekersController extends Controller
 
         $skills = $dataValidator["skills"];
         unset($dataValidator["skills"]);
-        
+      
         try {
             $profile  = $currentUser->profile()->create($dataValidator);
             $profile->skills()->attach($skills);
@@ -55,7 +55,7 @@ class JobSeekersController extends Controller
             $query->where("name" , $country);
         })->where("title" , "LIKE" , "%".$title."%")->get();
 
-        return empty(json_decode($jobs)) ? "No jobs found" : $jobs;
+        return empty(json_decode($jobs)) ? "No jobs found ..." : $jobs;
     }
 
     //Apply a job
@@ -68,10 +68,23 @@ class JobSeekersController extends Controller
             return response()->json("First create your profile");
 
         try {
-            $profile->appliedJobs()->attach(intval($id));
-            return $profile->appliedJobs;
+
+            $profile->jobs()->attach(intval($id) , ["apply" => Job::SAVE]);
+            return Job::with([
+                'profiles'=> function($query) use($profile){
+                    $query->where('profile_id' , $profile->id);
+                }
+            ])->find($id); 
+
         } catch (QueryException $e) {
-            return response()->json("You applied that Job");
+            $profile->jobs()->updateExistingPivot(intval($id) , ["apply" => Job::APPLY]); 
+
+            echo "you applied the job : ";
+            return Job::with([
+                'profiles'=> function($query) use($profile){
+                    $query->where('profile_id' , $profile->id);
+                }
+            ])->find($id);   
         }     
     }
 
@@ -83,20 +96,27 @@ class JobSeekersController extends Controller
         if(empty(json_decode($profile)))
             return response()->json("First create your profile");
 
-        $appliedJobs = $profile->appliedJobs;
+        $appliedJobs = Job::whereHas('profiles' , function($query) use($profile){
+            $query->where('profile_id' , $profile->id)
+                ->where('apply' , Job::APPLY);
+        })->get();
         return $appliedJobs;
     }
 
     // Save a Job
-    public function saveAppliedJob($id)
+    public function saveJob($id)
     {
         $user = User::with("profile")->find(Sentinel::getUser()->id);
         $profile = $user->profile;
         if(empty(json_decode($profile)))
             return response()->json("First create your profile");
-            
-        $profile->appliedJobs()->updateExistingPivot(intval($id), ["save" => Job::SAVE]);
-        return $profile->appliedJobs;
+        
+        try {
+            $profile->jobs()->attach(intval($id), ["save" => Job::SAVE]);
+            return $profile->appliedJobs;
+        } catch (QueryException $e) {
+           return response()->json("You already saved or applied that job");
+        }
     }
 
     // Validate data

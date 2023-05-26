@@ -58,9 +58,9 @@ class UsersController extends Controller
     }
 
     // Update a user 
-    public function update(Request $request , $id)
+    public function update(Request $request )
     {
-        $user = Sentinel::findUserById($id);
+        $user = Sentinel::findUserById(Sentinel::getUser()->id);
         $dataValidator = self::ValidateData($request);
 
         if(gettype($dataValidator) == "object"){

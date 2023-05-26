@@ -5,7 +5,7 @@ namespace App\Http\Middleware;
 
 use Cartalyst\Sentinel\Laravel\Facades\Sentinel;
 use Closure;
-use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Response;
 
 class AllPermissionsMiddleware
 {
