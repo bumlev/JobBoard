@@ -4,11 +4,10 @@ namespace App\Repositories\Classes;
 use App\Models\Job;
 use App\Repositories\Interfaces\JobsInterface;
 
-class AdminJobs implements JobsInterface
+/*class AdminJobs implements JobsInterface
 {
-    public function allJobs()
+    static public function allJobs()
     {
-        $jobs = Job::all();
-        return $jobs;      
+        return ['Admin'];
     }
-}
+}*/

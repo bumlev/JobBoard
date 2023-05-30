@@ -24,26 +24,25 @@ class JobSeekersController extends Controller
     public function createProfile(Request $request)
     {
         $currentUser = User::find(Sentinel::getUser()->id);
-        $dataValidator  = self::ValidateData($request);
+        $data  = self::ValidateData($request);
 
-        if(gettype($dataValidator) == "object")
+        if(gettype($data) == "object")
         {
-            $errors = $dataValidator->errors();
+            $errors = $data->errors();
             return $errors;
         } 
 
-        $skills = $dataValidator["skills"];
-        unset($dataValidator["skills"]);
+        $skills = $data["skills"];
+        unset($data["skills"]);
       
         try {
-            $profile  = $currentUser->profile()->create($dataValidator);
+            $profile  = $currentUser->profile()->create($data);
             $profile->skills()->attach($skills);
             return $profile;
         } catch (QueryException $e) {
             echo "Your profile is alredy exists : ";
             return $currentUser->profile;
-        }
-       
+        }   
     }
 
     /// Search jobs 
@@ -77,8 +76,8 @@ class JobSeekersController extends Controller
             ])->find($id); 
 
         } catch (QueryException $e) {
-            $profile->jobs()->updateExistingPivot(intval($id) , ["apply" => Job::APPLY]); 
 
+            $profile->jobs()->updateExistingPivot(intval($id) , ["apply" => Job::APPLY]); 
             echo "you applied the job : ";
             return Job::with([
                 'profiles'=> function($query) use($profile){
@@ -113,7 +112,7 @@ class JobSeekersController extends Controller
         
         try {
             $profile->jobs()->attach(intval($id), ["save" => Job::SAVE]);
-            return $profile->appliedJobs;
+            return $profile->jobs;
         } catch (QueryException $e) {
            return response()->json("You already saved or applied that job");
         }
@@ -144,7 +143,6 @@ class JobSeekersController extends Controller
             "country_id" => "Required|not_in:0",
             "skills.*" => "Required|not_in:0"
         ];
-
         return Validator::make($data , $data_rules)->fails() ? Validator::make($data , $data_rules) : $data;
     }
 }

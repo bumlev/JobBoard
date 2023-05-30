@@ -1,7 +1,7 @@
 <?php
 namespace App\Repositories\Interfaces;
 
-Interface JobsInterface
+/*Interface JobsInterface
 {
-    public function allJobs();
-}
+    static public function allJobs();
+}*/

@@ -3,23 +3,20 @@ namespace App\Repositories\Factories;
 
 use App\Repositories\Classes\AdminJobs;
 use App\Repositories\Classes\RecruiterJobs;
-use App\Repositories\Interfaces\JobsInterface;
-//use Cartalyst\Sentinel\Laravel\Facades\Sentinel;
+use Cartalyst\Sentinel\Laravel\Facades\Sentinel;
 
 class JobsFactoriesInterface
 {
-    public function make():JobsInterface
+    public function make()
     {
-        $user = \Cartalyst\Sentinel\Laravel\Facades\Sentinel::getUser();
-        if($user)
+        $user = Sentinel::getUser();
+        $roles = $user->roles->pluck("slug")->toArray();
+        
+        if(in_array('Admin' , $roles))
         {
-            if($user->inRole('Admin'))
-            {
-                return new AdminJobs();
-            }elseif($user->inRole('Recruiter')){
-                return new RecruiterJobs();
-            }
-        }
-       
+            return AdminJobs::class;
+        }elseif(in_array('Recruiter' , $roles)){
+            return RecruiterJobs::class;
+        }  
     }
 }

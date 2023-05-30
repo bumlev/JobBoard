@@ -21,6 +21,10 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::get('/coverage' , function(){
+    return view('coverage');
+});
+
 Route::get('/users' , [UsersController::class , "index"]);
 Route::get('/user/{id}' , [UsersController::class , "show"]);
 Route::post('/create_user' , [UsersController::class , "store"]);
@@ -33,7 +37,10 @@ Route::get('/logout' , [SessionsController::class , "logout"]);
 Route::get("/jobs" , [RecruitersController::class , "index"]);
 Route::get("/findRightCandidates/{id}" , [RecruitersController::class , "findRightCandidates"]);
 Route::get("/getProfile/{id}" , [RecruitersController::class , "getProfile"]);
-Route::post("/chatWithCandidate/{id}" , [RecruitersController::class , "chatWithCandidate"]);
+Route::get("postedJobs" , [RecruitersController::class , "postedJobs"]);
+Route::get("/execute" , [RecruitersController::class , "execute"]);
+
+Route::post("/chatWithCandidate" , [RecruitersController::class , "chatWithCandidate"]);
 Route::post("/postJob" , [RecruitersController::class , "postJob"]);
 Route::post("/searchProfile" , [RecruitersController::class , "searchProfile"]);
 

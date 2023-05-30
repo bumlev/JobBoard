@@ -36,7 +36,7 @@ class UserModelTest extends TestCase
     /** @test */
     public function it_can_update_a_user()
     {
-        $user = User::find(10);
+        $user = User::find(12);
         $data = [
             'first_name'=> 'Zelachou',
             'last_name' =>'Mukundwa',

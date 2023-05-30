@@ -14,22 +14,18 @@ use Illuminate\Support\Facades\Validator;
 
 class RecruitersController extends Controller
 {  
-    //protected $jobsFactoriesInterface;
+    protected $jobsFactoriesInterface;
     public function __construct()
     {
         $this->middleware("sentinel");
         $this->middleware("allpermissions:jobs.index" , ["only" => "index"]);
         $this->middleware("allpermissions:jobs.postJob" , ["only" => "postJob"]);
         $this->middleware("allpermissions:jobs.rightCandidates" , ["only" => "findRightCandidates"]);
-        //$this->jobsFactoriesInterface = $jobsFactoriesInterface->make();
     }
 
     // Display all avalaible jobs
     public function index()
     {
-        /*$jobs = $this->jobsFactoriesInterface->allJobs();
-        return $jobs;*/
-
        $jobs = Job::all();
        return $jobs;
     }
@@ -37,22 +33,30 @@ class RecruitersController extends Controller
     //post a job openings
     public function  postJob(Request $request)
     {
-        $dataValidator = self::ValidateData($request);
-        if(gettype($dataValidator) == "object")
+        $data = self::ValidateData($request);
+        if(gettype($data) == "object")
         {
-            $errors = $dataValidator->errors();
+            $errors = $data->errors();
             return $errors;
         }
 
-        $skills = $dataValidator["skills"];
-        $countries = $dataValidator["countries"];
+        $skills = $data["skills"];
+        $countries = $data["countries"];
         $keystoRemove = ["skills" , "countries"];
-        $dataValidator = array_diff_key($dataValidator , array_flip($keystoRemove));
+        $data = array_diff_key($data , array_flip($keystoRemove));
 
-        $job = Job::create($dataValidator);
+        $job = Job::create($data);
         $job->skills()->attach($skills);
         $job->countries()->attach($countries);
         return $job;
+    }
+
+    // Display all postedJobs
+    public function postedJobs()
+    {
+        $user = User::find(Sentinel::getUser()->id);
+        $postedJobs = $user->publishedJobs;
+        return $postedJobs;
     }
 
     // find the right Candidates for a jobs
@@ -85,7 +89,7 @@ class RecruitersController extends Controller
     }
 
     /// chat with a candidate
-    public function chatWithCandidate(Request $request , $id)
+    public function chatWithCandidate(Request $request)
     {
         $currentUser = Sentinel::getUser();
         $data = [
@@ -106,7 +110,7 @@ class RecruitersController extends Controller
         $content = $data["content"];
         unset($data["content"]);
 
-        $conversation = self::createChat($data , $id);
+        $conversation = self::createChat($data);
 
         $data = [
             "user_id" => $currentUser->id,
@@ -115,10 +119,16 @@ class RecruitersController extends Controller
         ];
         
         $message = Message::create($data);
-        return Message::with("user" , "conversation")->get();
+        return Message::with("user" , "conversation")->where('conversation_id' , $conversation->id)->get();
 
     }
 
+    /*public function execute(JobsFactoriesInterface $jobsFactoriesInterface)
+    {
+        $this->jobsFactoriesInterface = $jobsFactoriesInterface->make();
+        $jobs = $this->jobsFactoriesInterface::allJobs();
+        return $jobs;
+    }*/
     
     // Validate data
     static private function ValidateData($request)
@@ -142,7 +152,7 @@ class RecruitersController extends Controller
     }
 
     // Create a conversation
-    static private function createChat($data , $id)
+    static private function createChat($data)
     {
         $conversation = Conversation::whereIn("sender_id" , $data)
                                     ->whereIn("receiver_id" , $data)->first();
@@ -153,7 +163,7 @@ class RecruitersController extends Controller
         }
         else
         {
-            return Conversation::with("messages")->find($id);
+            return Conversation::with("messages")->find($conversation->id);
         }
     }
 }

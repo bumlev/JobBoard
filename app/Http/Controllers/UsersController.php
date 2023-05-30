@@ -11,14 +11,11 @@ use Illuminate\Support\Facades\Validator;
 
 class UsersController extends Controller
 {
-    protected $userRepositoryInterface;
-
     public function __construct()
     {
         $this->middleware('sentinel')->except(["store" , "update"]);
         $this->middleware('allpermissions:users.index', ['only' => 'index']);
         $this->middleware('allpermissions:users.show', ['only' => 'show']);
-        //$this->userRepositoryInterface = $userRepositoryInterface;
     }
 
     //Display all Users
@@ -31,18 +28,18 @@ class UsersController extends Controller
     // Create a user
     public function store(Request $request)
     {
-        $dataValidator = self::ValidateData($request); 
+        $data = self::ValidateData($request); 
 
-        if(gettype($dataValidator) == "object"){
-            $errors = $dataValidator->errors();
+        if(gettype($data) == "object"){
+            $errors = $data->errors();
             return json_decode($errors);
         }
 
-        $roles = $dataValidator["roles"];
-        unset($dataValidator["roles"]);
+        $roles = $data["roles"];
+        unset($data["roles"]);
 
         try {
-            $user = Sentinel::registerAndActivate($dataValidator);
+            $user = Sentinel::registerAndActivate($data);
             $user->roles()->attach($roles);
             return $user;   
         } catch (QueryException $e) {
@@ -61,18 +58,18 @@ class UsersController extends Controller
     public function update(Request $request )
     {
         $user = Sentinel::findUserById(Sentinel::getUser()->id);
-        $dataValidator = self::ValidateData($request);
+        $data = self::ValidateData($request);
 
-        if(gettype($dataValidator) == "object"){
-            $errors = $dataValidator->errors();
+        if(gettype($data) == "object"){
+            $errors = $data->errors();
             return json_decode($errors);
         }
 
-        $roles = $dataValidator["roles"];
-        unset($dataValidator["roles"]);
+        $roles = $data["roles"];
+        unset($data["roles"]);
 
         try {
-            Sentinel::update($user , $dataValidator);
+            Sentinel::update($user , $data);
             $user->roles()->sync($roles);
             return $user;
         } catch (QueryException $e) {
