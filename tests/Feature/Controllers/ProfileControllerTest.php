@@ -4,14 +4,15 @@ namespace Tests\Feature\Controllers;
 use App\Http\Controllers\JobSeekersController;
 use App\Http\Controllers\RecruitersController;
 use App\Models\Profile;
-use Cartalyst\Support\Collection;
+use Cartalyst\Sentinel\Laravel\Facades\Sentinel;
+use Database\Factories\UserFactory;
 use Illuminate\Http\Request;
 use Tests\TestCase;
 
 class ProfileControllerTest extends TestCase
 {
     /** @test */
-    public function create_a_profile()
+    public function create_a_profile_already_exists()
     {   
         $this->post("/authenticate" , ["email" => "levychris@gmail.com" , "password" => "levy_600"]);
         $data = [
@@ -34,6 +35,48 @@ class ProfileControllerTest extends TestCase
             $this->assertInstanceOf(Profile::class , $profile);
             $this->assertEquals($profile->education , $data["education"]);
         }  
+    }
+
+    /** @test */
+    public function create_a_profile_with_empty_data()
+    {
+        $this->post("/authenticate" , ["email" => "levychris@gmail.com" , "password" => "levy_600"]);
+        $data = [
+            "education" => '',
+            "level" => 4,
+            "cv" => "",
+            "cover_letter" => "LevyChris_cover_letter",
+            "phone" => "+250788910234",
+            "country_id" => '186',
+            "skills" => ['10' , '11' , '8']    
+        ];
+
+        $request = new Request($data);
+        $jobSeekersController  = new JobSeekersController();
+        $profile = $jobSeekersController->createProfile($request);
+        $this->assertTrue(property_exists($profile , 'messages'));
+    }
+
+    /** @test */
+    public function create_a_new_profile()
+    {
+        $data = (new UserFactory())->definition(); 
+        $user = Sentinel::registerAndActivate($data);
+        $this->post("/authenticate" , ["email" => $data['email'], "password" => $data['password']]);
+        $data = [
+            "education" => 'UK university',
+            "level" => 4,
+            "cv" => $data['first_name']."_cv",
+            "cover_letter" => $data["last_name"]."_cover_letter",
+            "phone" => "+250788910234",
+            "country_id" => '186',
+            "skills" => ['10' , '11' , '8']    
+        ];
+
+        $request = new Request($data);
+        $jobSeekersController  = new JobSeekersController();
+        $profile = $jobSeekersController->createProfile($request);
+        $this->assertInstanceOf(Profile::class , $profile);
     }
 
     /** @test */

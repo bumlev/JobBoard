@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Validator;
 
 class RecruitersController extends Controller
 {  
-    protected $jobsFactoriesInterface;
+    //protected $jobsFactoriesInterface;
     public function __construct()
     {
         $this->middleware("sentinel");

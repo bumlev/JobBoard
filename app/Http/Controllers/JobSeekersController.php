@@ -64,14 +64,15 @@ class JobSeekersController extends Controller
         $profile = $user->profile;
 
         if(empty(json_decode($profile)))
-            return response()->json("First create your profile");
+            return response()->json(["NoProfile" => "First create your profile"]);
 
         try {
 
-            $profile->jobs()->attach(intval($id) , ["apply" => Job::SAVE]);
+            $profile->jobs()->attach(intval($id) , ["apply" => Job::APPLY]);
             return Job::with([
                 'profiles'=> function($query) use($profile){
-                    $query->where('profile_id' , $profile->id);
+                    $query->where('profile_id' , $profile->id)
+                    ->where("apply" , Job::APPLY);
                 }
             ])->find($id); 
 

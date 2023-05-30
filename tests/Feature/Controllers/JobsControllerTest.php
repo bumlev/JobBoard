@@ -54,4 +54,33 @@ class JobsControllerTest extends TestCase
         $jobs = $recruitersController->index();
         $this->assertInstanceOf(Collection::class , $jobs);
     }
+
+    /** @test */
+    public function applyjob()
+    {
+        $this->post("/authenticate" , ["email" => "aristote@gmail.com" , "password" => "aristote_600"]);
+        $jobSeekersController = new JobSeekersController();
+        $response = $jobSeekersController->applyJob(4);
+        $this->assertNotEmpty($response->profiles);
+    }
+
+    /** @test */
+    public function apply_saved_job()
+    {
+        $job = Job::factory()->create();
+        $this->post("/authenticate" , ["email" => "aristote@gmail.com" , "password" => "aristote_600"]);
+        $jobSeekersController = new JobSeekersController();
+        $response = $jobSeekersController->applyJob($job->id);
+        $this->assertNotEmpty($response->profiles);
+
+    }
+
+    /** @test */
+    public function apply_job_without_job()
+    {
+        $this->post("/authenticate" , ["email" => "bumwelevy@yahoo.in" , "password" => "levy_600"]);
+        $jobSeekersController = new JobSeekersController();
+        $response = $jobSeekersController->applyJob(4);
+        $this->assertTrue(property_exists($response , 'data'));
+    }
 }
