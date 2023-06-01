@@ -7,6 +7,7 @@ use App\Models\Job;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Tests\TestCase;
+use Illuminate\Support\Str;
 
 class JobsControllerTest extends TestCase
 {
@@ -20,8 +21,15 @@ class JobsControllerTest extends TestCase
 
         $jobSeekersController = new JobSeekersController();
         $jobs = $jobSeekersController->searchJobs($request);
-    
-        $this->assertEquals($jobs , empty(json_decode($jobs)) ? "No jobs found" : $jobs);
+        
+        if(property_exists($jobs , 'data'))
+        {
+            $jobs = $jobs->getData()->NoJobs;
+            $this->assertEquals($jobs , "Jobs not found ...");  
+        }else{
+            $this->assertTrue(Str::contains($jobs , $request->input('title')));  
+        }
+      
     }
 
     /** @test */
@@ -39,12 +47,26 @@ class JobsControllerTest extends TestCase
         $request = new Request($data);
         $recruitersController =  new RecruitersController();
         $job = $recruitersController->postJob($request);
+        $this->assertInstanceOf(Job::class , $job);;
+        
+    }
 
-        if(property_exists($job , 'messages'))
-            $this->assertEquals($job->getFormat() , ":messages");
-        else{
-            $this->assertInstanceOf(Job::class , $job);;
-        }
+    /** @test */
+    public function post_job_with_empty_data()
+    {
+        $this->post("/authenticate" , ["email" => "levychris@gmail.com" , "password" => "levy_600"]);
+
+        $data = [
+            "title" => "",
+            "content" => "",
+            "skills" => ["12" , '13' , '7' , '8'],
+            "countries" => ["186" , "40"]
+        ];
+
+        $request = new Request($data);
+        $recruitersController =  new RecruitersController();
+        $job = $recruitersController->postJob($request);
+        $this->assertEquals($job->getFormat() , ":message");
     }
 
     /** @test */
@@ -56,16 +78,16 @@ class JobsControllerTest extends TestCase
     }
 
     /** @test */
-    public function applyjob()
+    public function apply_saved_job()
     {
         $this->post("/authenticate" , ["email" => "aristote@gmail.com" , "password" => "aristote_600"]);
         $jobSeekersController = new JobSeekersController();
-        $response = $jobSeekersController->applyJob(4);
+        $response = $jobSeekersController->applyJob(2);
         $this->assertNotEmpty($response->profiles);
     }
 
     /** @test */
-    public function apply_saved_job()
+    public function apply_job()
     {
         $job = Job::factory()->create();
         $this->post("/authenticate" , ["email" => "aristote@gmail.com" , "password" => "aristote_600"]);
@@ -82,5 +104,53 @@ class JobsControllerTest extends TestCase
         $jobSeekersController = new JobSeekersController();
         $response = $jobSeekersController->applyJob(4);
         $this->assertTrue(property_exists($response , 'data'));
+    }
+
+    /** @test */
+    public function applied_jobs_without_profile()
+    {
+        $this->post("/authenticate" , ["email" => "bumwelevy@yahoo.in" , "password" => "levy_600"]);
+        $jobSeekersController = new JobSeekersController();
+        $response = $jobSeekersController->appliedJobs();
+        $this->assertTrue(property_exists($response , 'data'));
+    }
+
+    /** @test */
+    public function applied_jobs_profile()
+    {
+        $this->post("/authenticate" , ["email" => "aristote@gmail.com" , "password" => "aristote_600"]);
+        $jobSeekersController = new JobSeekersController();
+        $response = $jobSeekersController->appliedJobs();
+        $this->assertInstanceOf(Collection::class , $response);
+    }
+
+    /** @test */
+    public function save_job_without_profile()
+    {
+        $this->post("/authenticate" , ["email" => "bumwelevy@yahoo.in" , "password" => "levy_600"]);
+        $jobSeekersController = new JobSeekersController();
+        $response = $jobSeekersController->saveJob(3);
+        $this->assertTrue(property_exists($response , 'data'));
+    }
+
+    /** @test */
+    public function save_job_with_profile()
+    {
+        $job = Job::factory()->create();
+        $this->post("/authenticate" , ["email" => "aristote@gmail.com" , "password" => "aristote_600"]);
+        $jobSeekersController = new JobSeekersController();
+        $response = $jobSeekersController->saveJob($job->id);
+        $this->assertEquals($response->pivot->save , Job::SAVE);
+    }
+
+    /** @test */
+    public function save_job_saved_job_or_applied_job()
+    {
+        $job = Job::factory()->create();
+        $this->post("/authenticate" , ["email" => "aristote@gmail.com" , "password" => "aristote_600"]);
+        $jobSeekersController = new JobSeekersController();
+        $response = $jobSeekersController->saveJob(2);
+        $response = $response->getData();
+        $this->assertEquals($response->savedData , "You already saved or applied that job");
     }
 }

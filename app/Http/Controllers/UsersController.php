@@ -13,6 +13,7 @@ class UsersController extends Controller
 {
     public function __construct()
     {
+        $this->middleware("setlocale");
         $this->middleware('sentinel')->except(["store" , "update"]);
         $this->middleware('allpermissions:users.index', ['only' => 'index']);
         $this->middleware('allpermissions:users.show', ['only' => 'show']);

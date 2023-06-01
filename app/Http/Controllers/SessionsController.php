@@ -8,6 +8,11 @@ use Illuminate\Http\Request;
 class SessionsController extends Controller
 {
 
+    public function __construct()
+    {
+        $this->middleware("setlocale");
+    }
+    
     //Authentication
     public function authenticate(Request $request)
     {
@@ -15,9 +20,8 @@ class SessionsController extends Controller
             "email" => $request->input("email"),
             "password" => $request->input("password")
         ];
-        
         $authenticate = Sentinel::authenticate($data); 
-        return $authenticate ? $authenticate : "Your password or email is incorrect";
+        return $authenticate ? $authenticate : response()->json(['errorLogin' => __('messages.errorLogin')]);
     }
 
     // Logout

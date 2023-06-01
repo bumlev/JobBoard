@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Job;
+use App\Models\Profile;
 use App\Models\User;
 use Cartalyst\Sentinel\Laravel\Facades\Sentinel;
 use Illuminate\Database\QueryException;
@@ -13,6 +14,7 @@ class JobSeekersController extends Controller
 {
     public function __construct()
     {
+        $this->middleware("setlocale");
         $this->middleware("sentinel");
         $this->middleware("allpermissions:jobs.createProfile" , ["only" => "createProfile"]);
         $this->middleware("allpermissions:jobs.applyJob" , ["only" => "applyJob"]);
@@ -31,16 +33,17 @@ class JobSeekersController extends Controller
             $errors = $data->errors();
             return $errors;
         } 
-
         $skills = $data["skills"];
         unset($data["skills"]);
       
-        try {
+        $hasNotProfile = self::HasNotProfile($currentUser->id);
+     
+        if($hasNotProfile){
             $profile  = $currentUser->profile()->create($data);
             $profile->skills()->attach($skills);
             return $profile;
-        } catch (QueryException $e) {
-            echo "Your profile is alredy exists : ";
+        }else{
+            echo __("messages.ProfileExists");
             return $currentUser->profile;
         }   
     }
@@ -54,7 +57,7 @@ class JobSeekersController extends Controller
             $query->where("name" , $country);
         })->where("title" , "LIKE" , "%".$title."%")->get();
 
-        return empty(json_decode($jobs)) ? "No jobs found ..." : $jobs;
+        return empty(json_decode($jobs)) ? response()->json(['NoJobs'=> __("messages.NoJobs")]) : $jobs;
     }
 
     //Apply a job
@@ -64,27 +67,17 @@ class JobSeekersController extends Controller
         $profile = $user->profile;
 
         if(empty(json_decode($profile)))
-            return response()->json(["NoProfile" => "First create your profile"]);
+            return response()->json(['NoProfile' => __('messages.NoProfile')]);
 
-        try {
+        $isValidateData = self::ifExistsDataOfPivotTable($profile->id , intval($id));
 
+        if($isValidateData){
             $profile->jobs()->attach(intval($id) , ["apply" => Job::APPLY]);
-            return Job::with([
-                'profiles'=> function($query) use($profile){
-                    $query->where('profile_id' , $profile->id)
-                    ->where("apply" , Job::APPLY);
-                }
-            ])->find($id); 
-
-        } catch (QueryException $e) {
-
+            return $profile->jobs()->where('job_id' , intval($id))->first();
+        }else{
             $profile->jobs()->updateExistingPivot(intval($id) , ["apply" => Job::APPLY]); 
-            echo "you applied the job : ";
-            return Job::with([
-                'profiles'=> function($query) use($profile){
-                    $query->where('profile_id' , $profile->id);
-                }
-            ])->find($id);   
+            echo __('messages.AppliedJob');
+            return $profile->jobs()->where('job_id' , intval($id))->first();   
         }     
     }
 
@@ -94,12 +87,10 @@ class JobSeekersController extends Controller
         $profile = $user->profile;
 
         if(empty(json_decode($profile)))
-            return response()->json("First create your profile");
-
-        $appliedJobs = Job::whereHas('profiles' , function($query) use($profile){
-            $query->where('profile_id' , $profile->id)
-                ->where('apply' , Job::APPLY);
-        })->get();
+            return response()->json(['NoProfile' => __('messages.NoProfile')]);
+            
+        $appliedJobs = $profile->jobs()->where("profile_id", $profile->id)
+                                        ->where('apply' , Job::APPLY)->get();
         return $appliedJobs;
     }
 
@@ -108,15 +99,19 @@ class JobSeekersController extends Controller
     {
         $user = User::with("profile")->find(Sentinel::getUser()->id);
         $profile = $user->profile;
+
         if(empty(json_decode($profile)))
-            return response()->json("First create your profile");
-        
-        try {
+            return response()->json(['NoProfile' => __('messages.NoProfile')]);
+
+        $isValidateData = self::ifExistsDataOfPivotTable($profile->id , intval($id));
+
+        if($isValidateData){
             $profile->jobs()->attach(intval($id), ["save" => Job::SAVE]);
-            return $profile->jobs;
-        } catch (QueryException $e) {
-           return response()->json("You already saved or applied that job");
+            return $profile->jobs()->where('job_id' , intval($id))->first();
+        }else{
+            return response()->json(["savedData"=> __("messages.savedData")]);
         }
+      
     }
 
     // Validate data
@@ -145,5 +140,24 @@ class JobSeekersController extends Controller
             "skills.*" => "Required|not_in:0"
         ];
         return Validator::make($data , $data_rules)->fails() ? Validator::make($data , $data_rules) : $data;
+    }
+
+    /// Check if there is a registration  of two data of pivot table
+    static private function ifExistsDataOfPivotTable($profile_id , $job_id)
+    {
+        $job = Job::with([
+            'profiles' => function($query) use($profile_id , $job_id){
+                $query->where('profile_id' , $profile_id)
+                ->where('job_id' , $job_id);
+            }
+        ])->find($job_id);
+        return empty(json_decode($job->profiles));
+    }
+
+    // check if a user a profile
+    static private function HasNotProfile($user_id)
+    {
+        $profile = Profile::where("user_id" , $user_id)->first();
+        return empty(json_decode($profile));
     }
 }

@@ -2,8 +2,6 @@
 namespace Tests\Feature\Controllers;
 
 use App\Http\Controllers\SessionsController;
-use App\Models\User;
-use Cartalyst\Sentinel\Users\UserInterface;
 use Illuminate\Http\Request;
 use Tests\TestCase;
 
@@ -15,16 +13,17 @@ class AuthenticationControllerTest extends TestCase
     {
         $request  = new Request([
             "email" => "bumwelevy@yahoo.in",
-            "password" => "levy_600"
+            "password" => "levy_500"
         ]);
 
         $sessionsController  = new SessionsController();
         $authenticate = $sessionsController->authenticate($request);
 
-        if(gettype($authenticate) == "object")
-            $this->assertEquals($request->input("email") , $authenticate->email);
-        else
+        if(property_exists($authenticate , 'data')){
+            $authenticate = $authenticate->getData()->errorLogin;
             $this->assertEquals($authenticate , "Your password or email is incorrect");
-    
+        }else{
+            $this->assertEquals($request->input("email") , $authenticate->email);
+        }
     }
 }
