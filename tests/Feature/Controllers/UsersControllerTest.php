@@ -2,6 +2,7 @@
 namespace Tests\Feature\Controllers;
 
 use App\Http\Controllers\UsersController;
+use App\Models\User;
 use Cartalyst\Sentinel\Users\UserInterface;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
@@ -11,7 +12,7 @@ class UsersControllerTest extends TestCase
 {
 
     /** @test */
-    public function it_store_a_user()
+    public function it_store_an_exist_user()
     {
         $data = [
             'first_name'=> 'Zelachou',
@@ -20,19 +21,23 @@ class UsersControllerTest extends TestCase
             'password' => 'secret',
             'roles' => ['2']
         ];
-
-        $request =  new Request($data);
+        $request =  Request::create('/create_user' , 'POST' , $data);
         $usersController = new UsersController();
-
         $user = $usersController->store($request);
+        $this->assertEquals($user->getFormat() , ":message");
+    }
 
-        if(property_exists($user , 'content'))
-            $this->assertEquals($user->getContent() , "The Email already exists !");
-        else{
-            $this->assertInstanceOf(UserInterface::class , $user);
-            $this->assertEquals($user->first_name , $request->input("first_name"));
-        }    
-
+    /** @test */
+    public function it_store_a_new_user()
+    {
+        $data = User::factory()->make()->toArray();
+        $data['password'] = "levy_600";
+        $data['roles'] = [2];
+        $request =  Request::create('/create_user' , 'POST' , $data);
+        $usersController = new UsersController();
+        $user = $usersController->store($request);
+        $this->assertInstanceOf(UserInterface::class , $user);
+        $this->assertEquals($user->first_name , $request->input("first_name"));
     }
 
     /** @test */

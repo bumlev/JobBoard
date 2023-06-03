@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\Role;
 use App\Models\User;
 use Cartalyst\Sentinel\Laravel\Facades\Sentinel;
-use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -33,48 +32,40 @@ class UsersController extends Controller
 
         if(gettype($data) == "object"){
             $errors = $data->errors();
-            return json_decode($errors);
+            return $errors;
         }
-
         $roles = $data["roles"];
         unset($data["roles"]);
 
-        try {
-            $user = Sentinel::registerAndActivate($data);
-            $user->roles()->attach($roles);
-            return $user;   
-        } catch (QueryException $e) {
-            return response("The Email already exists !");
-        }    
-    }
-
-    // Find a user 
-    public function show($id)
-    {
-        $user = User::find($id);
-        return $user;
+        $user = Sentinel::registerAndActivate($data);
+        $user->roles()->attach($roles);
+        return $user;   
     }
 
     // Update a user 
     public function update(Request $request )
     {
-        $user = Sentinel::findUserById(Sentinel::getUser()->id);
+        $currentUser = Sentinel::getUser();
         $data = self::ValidateData($request);
 
-        if(gettype($data) == "object"){
+        if(gettype($data) == "object")
+        {
             $errors = $data->errors();
             return json_decode($errors);
         }
+        $ifNewDataOfUser = User::where("email" , $data['email'])->first();
+        $ifNewDataOfUser = json_decode($ifNewDataOfUser);
 
         $roles = $data["roles"];
         unset($data["roles"]);
 
-        try {
-            Sentinel::update($user , $data);
-            $user->roles()->sync($roles);
-            return $user;
-        } catch (QueryException $e) {
-            return response()->json( "The Email already exists !");
+        if(!property_exists($ifNewDataOfUser , 'email') || $currentUser->email == $ifNewDataOfUser->email)
+        {
+            Sentinel::update($currentUser , $data);
+            $currentUser->roles()->sync($roles);
+            return $currentUser;
+        }else{
+            return response()->json(["ErrorUpdate" => __("messages.ErrorUpdate")]);
         }
     }
     
@@ -82,9 +73,10 @@ class UsersController extends Controller
     static private function ValidateData($request)
     {
         $roles = array_map("intval" , $request->input("roles"));
+        $method = $request->method();
 
         in_array(Role::IS_SET_ADMIN , $roles) ? 
-        die("you are not allowed to set yourself as admin") : "";
+        die(__('messages.ErrorAdmin')) : "";
 
         $data = [
             "email" => $request->input("email"),
@@ -95,7 +87,7 @@ class UsersController extends Controller
         ];
 
         $data_rules = [
-            "email" => "Required|email",
+            "email" => $method == 'POST' ? "Required|email|unique:users,email":"Required|email",
             "password" => "Required|Min:6",
             "first_name" => "Required|Min:3",
             "last_name" => "Required|Min:3",

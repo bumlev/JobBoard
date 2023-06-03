@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Cartalyst\Sentinel\Laravel\Facades\Sentinel;
 use Illuminate\Http\Request;
 
+
 class SessionsController extends Controller
 {
 
@@ -13,7 +14,7 @@ class SessionsController extends Controller
         $this->middleware("setlocale");
     }
     
-    //Authentication
+    // Authenticate as a User
     public function authenticate(Request $request)
     {
         $data = [
@@ -28,6 +29,6 @@ class SessionsController extends Controller
     public function logout()
     {
         Sentinel::logout(Null, true);
-        return response()->json("Logged out");
+        return response()->json(['logout'=> __('messages.logout')]);
     }
 }

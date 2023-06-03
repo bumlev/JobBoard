@@ -2,6 +2,7 @@
 namespace Tests\Feature\Controllers;
 
 use App\Http\Controllers\SessionsController;
+use Cartalyst\Sentinel\Users\UserInterface;
 use Illuminate\Http\Request;
 use Tests\TestCase;
 
@@ -23,7 +24,16 @@ class AuthenticationControllerTest extends TestCase
             $authenticate = $authenticate->getData()->errorLogin;
             $this->assertEquals($authenticate , "Your password or email is incorrect");
         }else{
-            $this->assertEquals($request->input("email") , $authenticate->email);
+            $this->assertEquals(UserInterface::class , $authenticate);
         }
+    }
+
+    /** @test */
+    public function logout()
+    {
+       $sessionsController = new SessionsController();
+       $response = $sessionsController->logout();
+       $response = $response->getData();
+       $this->assertEquals($response->logout , 'Logged out');
     }
 }

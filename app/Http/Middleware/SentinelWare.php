@@ -12,7 +12,6 @@ class SentinelWare
 		if (Sentinel::guest()) {
 			return response()->json(["guestAccess"=>"You are not logged in!!"]);
 		}
-
 		return $next($request);
 	}
 }

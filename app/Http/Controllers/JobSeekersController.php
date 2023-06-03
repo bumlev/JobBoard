@@ -6,7 +6,6 @@ use App\Models\Job;
 use App\Models\Profile;
 use App\Models\User;
 use Cartalyst\Sentinel\Laravel\Facades\Sentinel;
-use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
