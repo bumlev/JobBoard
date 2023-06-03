@@ -10,7 +10,7 @@ class SentinelWare
 	public function handle(Request $request, Closure $next)
 	{
 		if (Sentinel::guest()) {
-			return response()->json(["guestAccess"=>"You are not logged in!!"]);
+			return response()->json(["AuthError"=> __("messages.AuthError")]);
 		}
 		return $next($request);
 	}

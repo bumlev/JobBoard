@@ -35,9 +35,9 @@ class JobSeekersController extends Controller
         $skills = $data["skills"];
         unset($data["skills"]);
       
-        $hasNotProfile = self::HasNotProfile($currentUser->id);
+        $ifNotProfile = self::ifNotProfile($currentUser->id);
      
-        if($hasNotProfile){
+        if($ifNotProfile){
             $profile  = $currentUser->profile()->create($data);
             $profile->skills()->attach($skills);
             return $profile;
@@ -68,9 +68,9 @@ class JobSeekersController extends Controller
         if(empty(json_decode($profile)))
             return response()->json(['NoProfile' => __('messages.NoProfile')]);
 
-        $isValidateData = self::ifExistsDataOfPivotTable($profile->id , intval($id));
+        $ifNotDataPivotTable = self::ifNotDataOfPivotTable($profile->id , intval($id));
 
-        if($isValidateData){
+        if($ifNotDataPivotTable){
             $profile->jobs()->attach(intval($id) , ["apply" => Job::APPLY]);
             return $profile->jobs()->where('job_id' , intval($id))->first();
         }else{
@@ -102,9 +102,9 @@ class JobSeekersController extends Controller
         if(empty(json_decode($profile)))
             return response()->json(['NoProfile' => __('messages.NoProfile')]);
 
-        $isValidateData = self::ifExistsDataOfPivotTable($profile->id , intval($id));
+        $ifNotDataPivotTable = self::ifNotDataOfPivotTable($profile->id , intval($id));
 
-        if($isValidateData){
+        if($ifNotDataPivotTable){
             $profile->jobs()->attach(intval($id), ["save" => Job::SAVE]);
             return $profile->jobs()->where('job_id' , intval($id))->first();
         }else{
@@ -142,7 +142,7 @@ class JobSeekersController extends Controller
     }
 
     /// Check if there is a registration  of two data of pivot table
-    static private function ifExistsDataOfPivotTable($profile_id , $job_id)
+    static private function ifNotDataOfPivotTable($profile_id , $job_id)
     {
         $job = Job::with([
             'profiles' => function($query) use($profile_id , $job_id){
@@ -154,7 +154,7 @@ class JobSeekersController extends Controller
     }
 
     // check if a user a profile
-    static private function HasNotProfile($user_id)
+    static private function ifNotProfile($user_id)
     {
         $profile = Profile::where("user_id" , $user_id)->first();
         return empty(json_decode($profile));

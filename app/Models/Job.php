@@ -43,7 +43,7 @@ class Job extends Model
         $countries = $this->countries->pluck("name")->toArray();
         $skills = $this->skills->pluck("id")->toArray();
         $matchProfiles = [];
-        
+
         foreach($profiles as $profile)
         {
             $sklls = $profile->skills->pluck("id")->toArray();
