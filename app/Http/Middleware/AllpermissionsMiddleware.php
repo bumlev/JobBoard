@@ -12,7 +12,7 @@ class AllPermissionsMiddleware
 		if (!Sentinel::hasAccess($permissions)) {
 			$roleName = Sentinel::getUser()->roles()->first()->name;
 			Sentinel::logout(NULL, true);
-			return response()->json(['AuthorizationError' => __("messages.PreAuthorizationRole").$roleName." ".__("messages.AuthorizationError")]);
+			return response()->json(['AuthorizationError' => __("messages.AuthorizationRole").$roleName." ".__("messages.AuthorizationError")]);
 		}
 		return $next($request);
 	}
