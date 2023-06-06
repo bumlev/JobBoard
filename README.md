@@ -63,3 +63,9 @@ The Laravel framework is open-sourced software licensed under the [MIT license](
 ## README for JobBoard
 
 ## Cloning a Laravel application with Wampserver, PHP 7.4.33 and Composer 2.5.7
+
+## Prerequisites
+
+    Make sure you have the following installed on your system:
+    Wampserver with PHP 7.4.33 enabled.
+    Composer version 2.5.7 or higher.
