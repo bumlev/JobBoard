@@ -98,7 +98,7 @@ class RecruitersController extends Controller
         ];
         
         $data_rules = [
-            "receiver_id" => "Required|not_in:0",
+            "receiver_id" => "Required|numeric|not_in:0",
             "content" => "Required"
         ];
 
@@ -140,7 +140,8 @@ class RecruitersController extends Controller
             "skills.*" => "Required|numeric|not_in:0",
             "countries.*" => "Required|numeric|not_in:0"
         ];
-        return Validator::make($data , $data_rules)->fails() ? Validator::make($data , $data_rules):$data;
+        $validator = Validator::make($data , $data_rules);
+        return $validator->fails() ? $validator :$data;
     }
 
     // Create a conversation

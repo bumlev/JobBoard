@@ -45,25 +45,24 @@ class UsersController extends Controller
     // Update a user 
     public function update(Request $request )
     {
-        $currentUser = Sentinel::getUser();
         $data = self::ValidateData($request);
-
         if(gettype($data) == "object")
         {
             $errors = $data->errors();
             return json_decode($errors);
         }
-        $ifNewDataOfUser = User::where("email" , $data['email'])->first();
-        $ifNewDataOfUser = json_decode($ifNewDataOfUser);
+        
+        $currentUser = Sentinel::getUser();
+        $NewDataWithMyEmailOrNewEmail = self::ifNewDataWithMyEmailOrNewEmail($currentUser , $data["email"]);
 
-        $roles = $data["roles"];
-        unset($data["roles"]);
-
-        if(!property_exists($ifNewDataOfUser , 'email') || $currentUser->email == $ifNewDataOfUser->email)
+        if($NewDataWithMyEmailOrNewEmail)
         {
+            $roles = $data["roles"];
+            unset($data["roles"]);
             Sentinel::update($currentUser , $data);
             $currentUser->roles()->sync($roles);
             return $currentUser;
+
         }else{
             return response()->json(["ErrorUpdate" => __("messages.ErrorUpdate")]);
         }
@@ -96,5 +95,12 @@ class UsersController extends Controller
         
         $validator = Validator::make($data , $data_rules);
         return $validator->fails() ? $validator : $data ;
+    }
+
+    // Test if you update data with your email or new email
+    static private function ifNewDataWithMyEmailOrNewEmail($currentUser , $email)
+    {
+        $ifNewDataOfUser = User::where("email" , $email)->first();
+        return !$ifNewDataOfUser || $currentUser->email == $ifNewDataOfUser->email;
     }
 }
