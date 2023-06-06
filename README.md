@@ -85,8 +85,8 @@ The Laravel framework is open-sourced software licensed under the [MIT license](
 Follow the steps below to clone and run your Laravel application:
 
     1.Open a command prompt or terminal.
-    2.Clone your Laravel application repository using the git clone 
-    command followed by the repository URL. For example :
+    2.Clone your Laravel application repository using the git clone command followed 
+    by the repository URL. For example :
     git clone https://github.com/your_user/your_application.git
 
     3.Navigate to your cloned application directory using the cd command. For example:
