@@ -23,7 +23,8 @@ class JobSeekersController extends Controller
     // Create a profile
     public function createProfile(Request $request)
     {
-        $currentUser = User::find(Sentinel::getUser()->id);
+        $currentUser_id = Sentinel::getUser()->id;
+        $currentUser = User::find($currentUser_id);
         $data  = self::ValidateData($request);
 
         if(gettype($data) == "object")

@@ -79,3 +79,42 @@ The Laravel framework is open-sourced software licensed under the [MIT license](
     Make sure you have the following installed on your system:
     Wampserver with PHP 7.4.33 enabled.
     Composer version 2.5.7 or higher.
+
+## Steps
+
+Follow the steps below to clone and run your Laravel application:
+
+    1.Open a command prompt or terminal.
+    2.Clone your Laravel application repository using the git clone command followed by the repository URL. For example :
+    git clone https://github.com/your_user/your_application.git
+
+    3.Navigate to your cloned application directory using the cd command. For example:
+        cd votre_application
+
+    4.Copy the .env.example file by creating a new .env file using the copy or cp command. For example :
+    
+        On Windows:
+            copy .env.example .env
+
+        On Linux/Mac :
+            cp .env.example .env
+
+    5.Open the .env file in a text editor and configure your database settings, such as DB_HOST, DB_PORT, DB_DATABASE, DB_USERNAME, and DB_PASSWORD.
+
+    6.Install the Laravel application dependencies by running the following command:
+        composer install
+
+    7.Generate an application key using the php artisan key:generate command:
+        php artisan key:generate
+
+    9.Start the Laravel development server using the php artisan serve command:
+        php artisan serve
+        The development server will run on http://localhost:8000 by default.
+
+    10.Open your web browser and navigate to the URL http://localhost:8000 to see your running Laravel application.
+
+
+
+
+
+
