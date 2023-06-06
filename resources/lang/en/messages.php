@@ -10,6 +10,7 @@ return [
     'logout'=>"Logged out",
     'NoJobs'=> "Jobs not found ...",
     'NoProfile' => "First create your profile",
+    "PreAuthorizationRole" => "As a ",
     'ProfileExists' => "Your profile already exists ",
     'savedData' => 'You already saved or applied that job'
 ];

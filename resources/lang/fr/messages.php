@@ -10,6 +10,7 @@ return [
     'logout'=>"Déconnecté",
     'NoJobs'=> "Offres d'emploi introuvables ...",
     'NoProfile' => "Créez d'abord votre profil",
+    "PreAuthorizationRole" => "En tant que ",
     'ProfileExists' => "Votre profil existe déjà ",
     'savedData' => 'Vous avez déjà enregistré ou postulé ce travail'
 ];
