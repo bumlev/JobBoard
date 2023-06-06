@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\FilesController;
 use App\Http\Controllers\JobSeekersController;
 use App\Http\Controllers\LanguageController;
 use App\Http\Controllers\RecruitersController;
@@ -26,6 +27,7 @@ Route::get('/coverage' , function(){
     return view('coverage');
 });
 
+Route::get("storage/app/public/images/{img}" , [FilesController::class , "getStoredImage"]);
 Route::get('lang/{lang}' , [LanguageController::class , 'switchLanguage']);
 
 Route::get('/users' , [UsersController::class , "index"]);
@@ -40,7 +42,6 @@ Route::get("/jobs" , [RecruitersController::class , "index"]);
 Route::get("/findRightCandidates/{id}" , [RecruitersController::class , "findRightCandidates"]);
 Route::get("/getProfile/{id}" , [RecruitersController::class , "getProfile"]);
 Route::get("postedJobs" , [RecruitersController::class , "postedJobs"]);
-//Route::get("/execute" , [RecruitersController::class , "execute"]);
 
 Route::post("/chatWithCandidate" , [RecruitersController::class , "chatWithCandidate"]);
 Route::post("/postJob" , [RecruitersController::class , "postJob"]);

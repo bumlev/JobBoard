@@ -13,7 +13,7 @@ class UsersController extends Controller
     public function __construct()
     {
         $this->middleware("setlocale");
-        $this->middleware('sentinel')->except(["store" , "update"]);
+        $this->middleware('sentinel')->except(["store"]);
         $this->middleware('allpermissions:users.index', ['only' => 'index']);
         $this->middleware('allpermissions:users.show', ['only' => 'show']);
     }
@@ -93,6 +93,8 @@ class UsersController extends Controller
             "last_name" => "Required|Min:3",
             "roles.*" => "required|not_in:0"
         ];
-        return Validator::make($data , $data_rules)->fails() ? Validator::make($data , $data_rules) : $data ;
+        
+        $validator = Validator::make($data , $data_rules);
+        return $validator->fails() ? $validator : $data ;
     }
 }

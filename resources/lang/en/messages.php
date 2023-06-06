@@ -10,6 +10,6 @@ return [
     'logout'=>"Logged out",
     'NoJobs'=> "Jobs not found ...",
     'NoProfile' => "First create your profile",
-    'ProfileExists' => "Your profile already exists : ",
+    'ProfileExists' => "Your profile already exists ",
     'savedData' => 'You already saved or applied that job'
 ];

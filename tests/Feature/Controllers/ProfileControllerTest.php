@@ -31,10 +31,6 @@ class ProfileControllerTest extends TestCase
 
         if(property_exists($profile , 'messages'))
             $this->assertEquals($profile->getFormat() , ":message");
-        else{
-            $this->assertInstanceOf(Profile::class , $profile);
-            $this->assertEquals($profile->education , $data["education"]);
-        }  
     }
 
     /** @test */

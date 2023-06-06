@@ -10,6 +10,7 @@
         "fideloper/proxy": "^4.4",
         "fruitcake/laravel-cors": "^2.0",
         "guzzlehttp/guzzle": "^6.0.1",
+        "intervention/image": "^2.7",
         "laracasts/flash": "*",
         "laravel/framework": "^8.75",
         "laravel/passport": "*",

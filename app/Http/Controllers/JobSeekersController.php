@@ -3,12 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\Job;
-use App\Models\Profile;
 use App\Models\User;
+use Carbon\Carbon;
 use Cartalyst\Sentinel\Laravel\Facades\Sentinel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
-
 class JobSeekersController extends Controller
 {
     public function __construct()
@@ -34,17 +33,13 @@ class JobSeekersController extends Controller
         } 
         $skills = $data["skills"];
         unset($data["skills"]);
-      
-        $ifNotProfile = self::ifNotProfile($currentUser->id);
-     
-        if($ifNotProfile){
-            $profile  = $currentUser->profile()->create($data);
-            $profile->skills()->attach($skills);
-            return $profile;
-        }else{
-            echo __("messages.ProfileExists");
-            return $currentUser->profile;
-        }   
+
+        $data["cv"] = self::getUrlFile($data['cv']);
+        $data["cover_letter"] = self::getUrlFile($data['cover_letter']);
+
+        $profile  = $currentUser->profile()->create($data);
+        $profile->skills()->attach($skills);
+        return $profile;
     }
 
     /// Search jobs 
@@ -117,11 +112,21 @@ class JobSeekersController extends Controller
     static private function ValidateData($request)
     {
         $currentUser = Sentinel::getUser();
+        $file = $request->file();
+        $cvName = self::getName($file["cv"]);
+        $CL = self::getName($file["cover_letter"]);
+        
         $data = [
             "education" => $request->input("education"),
             "degree_id" => intval($request->input("level")),
-            "cv" => $request->input("cv"),
-            "cover_letter" => $request->input("cover_letter"),
+            "cv" => [
+                "file"=>$file["cv"], 
+                "name"=> $cvName["name"]."_CV".".".$cvName["type"]
+            ],
+            "cover_letter" => [
+                "file" =>$file["cover_letter"], 
+                "name"=>$CL["name"]."_CL".".".$CL["type"]
+            ],
             "phone" => $request->input("phone"),
             "user_id" => $currentUser->id,
             "country_id" => intval($request->input("country_id")),
@@ -131,14 +136,21 @@ class JobSeekersController extends Controller
         $data_rules = [
             "education" => "Required|min:6",
             "degree_id" => "Required|not_in:0",
-            "cv" => "Required",
-            "cover_letter" => "Required",
+            "cv.file" => 'required|mimes:jpeg,png,pdf,docx|max:2048',
+            "cv.name" => 'required',
+            "cover_letter.file" => 'required|mimes:jpeg,png,pdf,docx|max:2048',
+            "cover_letter.name" => 'required',
             "phone" => "Required",
-            "user_id" => "Required",
+            "user_id" => "Required|unique:profiles,user_id",
             "country_id" => "Required|not_in:0",
             "skills.*" => "Required|not_in:0"
         ];
-        return Validator::make($data , $data_rules)->fails() ? Validator::make($data , $data_rules) : $data;
+
+        $data_customise = [
+            "user_id.unique" => __("Messages.ProfileExists")
+        ];
+        $validator  = Validator::make($data , $data_rules , $data_customise);
+        return $validator->fails() ? $validator : $data;
     }
 
     /// Check if there is a registration  of two data of pivot table
@@ -150,13 +162,27 @@ class JobSeekersController extends Controller
                 ->where('job_id' , $job_id);
             }
         ])->find($job_id);
-        return empty(json_decode($job->profiles));
+        return $job->profiles->isEmpty();
     }
 
-    // check if a user a profile
-    static private function ifNotProfile($user_id)
+    // Get the Url of the file
+    static private function getUrlFile($file)
+    { 
+        $path = $file["file"]->storeAs('public/images' , $file["name"]);
+        $fileUrl = asset("storage/app/".$path); 
+        return $fileUrl;
+
+    }
+
+    // Get the Name of the File
+    static private function getName($file)
     {
-        $profile = Profile::where("user_id" , $user_id)->first();
-        return empty(json_decode($profile));
+        $User = Sentinel::getUser();
+        $filename = $User->first_name;
+        $time = Carbon::now()->format("YmdHisv");
+        return [
+            "name"=>$filename.$time , 
+            "type" => $file->getClientOriginalExtension()
+        ];
     }
 }

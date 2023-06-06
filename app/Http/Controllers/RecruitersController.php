@@ -7,14 +7,12 @@ use App\Models\Job;
 use App\Models\Message;
 use App\Models\Profile;
 use App\Models\User;
-use App\Repositories\Factories\JobsFactoriesInterface;
 use Cartalyst\Sentinel\Laravel\Facades\Sentinel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
 class RecruitersController extends Controller
 {  
-    //protected $jobsFactoriesInterface;
     public function __construct()
     {
         $this->middleware("setlocale");
@@ -123,13 +121,6 @@ class RecruitersController extends Controller
         return Message::with("user" , "conversation")->where('conversation_id' , $conversation->id)->get();
 
     }
-
-    /*public function execute(JobsFactoriesInterface $jobsFactoriesInterface)
-    {
-        $this->jobsFactoriesInterface = $jobsFactoriesInterface->make();
-        $jobs = $this->jobsFactoriesInterface::allJobs();
-        return $jobs;
-    }*/
     
     // Validate data
     static private function ValidateData($request)

@@ -2,7 +2,7 @@
 namespace App\Repositories\Factories;
 
 use App\Repositories\Classes\AdminJobs;
-use App\Repositories\Classes\RecruiterJobs;
+/*use App\Repositories\Classes\RecruiterJobs;
 use Cartalyst\Sentinel\Laravel\Facades\Sentinel;
 
 class JobsFactoriesInterface
@@ -19,4 +19,4 @@ class JobsFactoriesInterface
             return RecruiterJobs::class;
         }  
     }
-}
+}*/
