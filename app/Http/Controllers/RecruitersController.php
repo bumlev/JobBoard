@@ -137,8 +137,8 @@ class RecruitersController extends Controller
         $data_rules = [
             "title" => "Required|Min:5",
             "content" => "Required",
-            "skills.*" => "Required|not_in:0",
-            "countries.*" => "Required|not_in:0"
+            "skills.*" => "Required|numeric|not_in:0",
+            "countries.*" => "Required|numeric|not_in:0"
         ];
         return Validator::make($data , $data_rules)->fails() ? Validator::make($data , $data_rules):$data;
     }

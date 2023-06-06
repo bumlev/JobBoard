@@ -91,7 +91,7 @@ class UsersController extends Controller
             "password" => "Required|Min:6",
             "first_name" => "Required|Min:3",
             "last_name" => "Required|Min:3",
-            "roles.*" => "required|not_in:0"
+            "roles.*" => "required|numeric|not_in:0"
         ];
         
         $validator = Validator::make($data , $data_rules);

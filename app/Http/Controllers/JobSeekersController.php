@@ -113,19 +113,18 @@ class JobSeekersController extends Controller
     {
         $currentUser = Sentinel::getUser();
         $file = $request->file();
-        $cvName = self::getName($file["cv"]);
-        $CL = self::getName($file["cover_letter"]);
-        
+        $fileName = $currentUser->first_name.Carbon::now()->format("YmdHisv");
+
         $data = [
             "education" => $request->input("education"),
             "degree_id" => intval($request->input("level")),
             "cv" => [
                 "file"=>$file["cv"], 
-                "name"=> $cvName["name"]."_CV".".".$cvName["type"]
+                "name"=> $fileName."_CV".".".$file["cv"]->getClientOriginalExtension()
             ],
             "cover_letter" => [
                 "file" =>$file["cover_letter"], 
-                "name"=>$CL["name"]."_CL".".".$CL["type"]
+                "name"=>$fileName."_CL".".".$file["cover_letter"]->getClientOriginalExtension()
             ],
             "phone" => $request->input("phone"),
             "user_id" => $currentUser->id,
@@ -135,15 +134,15 @@ class JobSeekersController extends Controller
 
         $data_rules = [
             "education" => "Required|min:6",
-            "degree_id" => "Required|not_in:0",
+            "degree_id" => "Required|numeric|not_in:0",
             "cv.file" => 'required|mimes:jpeg,png,pdf,docx|max:2048',
             "cv.name" => 'required',
             "cover_letter.file" => 'required|mimes:jpeg,png,pdf,docx|max:2048',
             "cover_letter.name" => 'required',
             "phone" => "Required",
             "user_id" => "Required|unique:profiles,user_id",
-            "country_id" => "Required|not_in:0",
-            "skills.*" => "Required|not_in:0"
+            "country_id" => "Required|numeric|not_in:0",
+            "skills.*" => "Required|numeric|not_in:0"
         ];
 
         $data_customise = [
@@ -172,17 +171,5 @@ class JobSeekersController extends Controller
         $fileUrl = asset("storage/app/".$path); 
         return $fileUrl;
 
-    }
-
-    // Get the Name of the File
-    static private function getName($file)
-    {
-        $User = Sentinel::getUser();
-        $filename = $User->first_name;
-        $time = Carbon::now()->format("YmdHisv");
-        return [
-            "name"=>$filename.$time , 
-            "type" => $file->getClientOriginalExtension()
-        ];
     }
 }
