@@ -53,7 +53,8 @@ class RecruitersController extends Controller
     // Display all postedJobs
     public function postedJobs()
     {
-        $user = User::find(Sentinel::getUser()->id);
+        $currentUser_id = Sentinel::getUser()->id;
+        $user = User::find($currentUser_id);
         $postedJobs = $user->publishedJobs;
         return $postedJobs;
     }
@@ -91,21 +92,12 @@ class RecruitersController extends Controller
     public function chatWithCandidate(Request $request)
     {
         $currentUser = Sentinel::getUser();
-        $data = [
-            "sender_id" => $currentUser->id,
-            "receiver_id" => intval($request->input("receiver")),
-            "content" => $request->input("content")
-        ];
+        $data = self::ValidateDataChat($request);
         
-        $data_rules = [
-            "receiver_id" => "Required|numeric|not_in:0",
-            "content" => "Required"
-        ];
+        if(gettype($data) == "object")
+            return $data->errors();
 
-        $dataValidator = Validator::make($data , $data_rules); 
-        if($dataValidator->fails())
-            return $dataValidator->errors();
-
+        $data["sender_id"] = $currentUser->id;
         $content = $data["content"];
         unset($data["content"]);
 
@@ -147,8 +139,8 @@ class RecruitersController extends Controller
     // Create a conversation
     static private function createChat($data)
     {
-        $conversation = Conversation::whereIn("sender_id" , $data)
-                                    ->whereIn("receiver_id" , $data)->first();
+        $conversation = Conversation::where("sender_id" , $data["sender_id"])
+                                    ->where("receiver_id" , $data["receiver_id"])->first();
         if(empty($conversation))
         {
             $conversation = Conversation::create($data);
@@ -158,5 +150,21 @@ class RecruitersController extends Controller
         {
             return Conversation::with("messages")->find($conversation->id);
         }
+    }
+
+    // Validate data chat 
+    static private function ValidateDataChat($request)
+    {
+        $data = [
+            "receiver_id" => intval($request->input("receiver")),
+            "content" => $request->input("content")
+        ];
+        
+        $data_rules = [
+            "receiver_id" => "Required|numeric|not_in:0",
+            "content" => "Required"
+        ];
+        $dataValidator = Validator::make($data , $data_rules); 
+        return $dataValidator->fails() ? $dataValidator : $data;
     }
 }
