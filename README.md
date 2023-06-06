@@ -60,6 +60,9 @@ If you discover a security vulnerability within Laravel, please send an e-mail t
 
 The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
 
+
+
+
 ## README for JobBoard
 
 ## Cloning a Laravel application with Wampserver, PHP 7.4.33 and Composer 2.5.7
