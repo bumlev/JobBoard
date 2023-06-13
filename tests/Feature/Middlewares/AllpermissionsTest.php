@@ -22,10 +22,10 @@ class AllPermissionsTest extends TestCase
         $data = User::factory()->make()->toArray();
         $data["password"] = "levy_600";
         $data["roles"] = [3];
+
         $request = new Request($data);
         $usersController = new UsersController();
         $usersController->store($request);
-     
         $this->post("/authenticate" , ["email" => $data["email"] , "password" => $data["password"]]);
 
         $permissions = ['jobs.appliedJobs'];
@@ -50,6 +50,7 @@ class AllPermissionsTest extends TestCase
         $data = User::factory()->make()->toArray();
         $data["password"] = "levy_600";
         $data["roles"] = [2];
+
         $request = new Request($data);
         $usersController = new UsersController();
         $usersController->store($request);
