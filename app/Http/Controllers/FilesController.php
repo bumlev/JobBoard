@@ -17,7 +17,7 @@ class FilesController extends Controller
         if (Storage::exists($imagePath)) {
 
             // Retrieve the image contents
-            $imageContents = Storage::get($imagePath); 
+            $imageContents = Storage::get($imagePath);
             if(in_array($extension , $extensions))
             {
                 $resizedImage= Image::make($imageContents)->resize(170 , 170);
@@ -28,7 +28,8 @@ class FilesController extends Controller
             $headers = [
                 'Content-Type' => Storage::mimeType($imagePath),
             ];
-
+            
+            
             // You can now use the $imageContents variable as needed (e.g., return it as a response or process it further)
             return Response($imageContents, 200, $headers);
         }

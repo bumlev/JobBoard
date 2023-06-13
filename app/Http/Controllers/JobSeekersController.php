@@ -77,7 +77,8 @@ class JobSeekersController extends Controller
     }
 
     // Display all jobs you applied jobs
-    public function appliedJobs(){
+    public function appliedJobs()
+    {
         $user = User::find(Sentinel::getUser()->id);
         $profile = $user->profile;
 
@@ -115,7 +116,6 @@ class JobSeekersController extends Controller
         $currentUser = Sentinel::getUser();
         $file = $request->file();
         $fileName = $currentUser->first_name.Carbon::now()->format("YmdHisv");
-
         $data = [
             "education" => $request->input("education"),
             "degree_id" => intval($request->input("level")),
@@ -132,7 +132,6 @@ class JobSeekersController extends Controller
             "country_id" => intval($request->input("country_id")),
             "skills" => array_map("intval" , $request->input("skills"))     
         ];
-
         $data_rules = [
             "education" => "Required|min:6",
             "degree_id" => "Required|numeric|not_in:0",
@@ -171,6 +170,5 @@ class JobSeekersController extends Controller
         $path = $file["file"]->storeAs('public/images' , $file["name"]);
         $fileUrl = asset("storage/app/".$path); 
         return $fileUrl;
-
     }
 }

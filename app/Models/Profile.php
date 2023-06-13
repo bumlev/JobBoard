@@ -24,6 +24,11 @@ class Profile extends Model
         return $this->belongsTo(Country::class);
     }
 
+    public function degree()
+    {
+        return $this->belongsTo(Degree::class);
+    }
+
     public function skills()
     {
         return $this->belongsToMany(Skill::class , "profile_skills");

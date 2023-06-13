@@ -7,7 +7,7 @@ use Closure;
 
 class AllPermissionsMiddleware
 {
-	public function handle($request, Closure $next, ...$permissions)
+	public function handle($request, Closure $next, $permissions)
 	{
 		if (!Sentinel::hasAccess($permissions)) {
 			$roleName = Sentinel::getUser()->roles()->first()->name;

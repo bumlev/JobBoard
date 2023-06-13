@@ -2,15 +2,24 @@
 namespace Tests\Feature\Middlewares;
 
 use App\Http\Middleware\SentinelWare;
+use App\Models\User;
+use Cartalyst\Sentinel\Laravel\Facades\Sentinel;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\Request;
 use Tests\TestCase;
 
 class SentinelWareTest extends TestCase
 {
+    use RefreshDatabase;
+    
     /** @test */
     public function is_authenticated()
     {
-        $this->post("/authenticate" , ["email" => "bumwejaychris@yahoo.com" , "password" => "levy_600"]);
+        $data  = User::factory()->make()->toArray();
+        $data["password"] = "levy_600";
+        $user = Sentinel::registerAndActivate($data);
+
+        $this->post("/authenticate" , ["email" => $user->email, "password" => $data["password"]]);
         $request = new Request();
         $nextClosure = function () {
             return response('Passed');
@@ -34,6 +43,6 @@ class SentinelWareTest extends TestCase
         $response = $sentinelWare->handle($request , $nextClosure);
         $jsondata = $response->getContent();
         $data = json_decode($jsondata , true);
-        $this->assertEquals($data['guestAccess'] , "You are not logged in!!");
+        $this->assertEquals($data['AuthError'] , "You are not logged in!!");
     }
 }

@@ -25,7 +25,7 @@ class RecruitersController extends Controller
     // Display all avalaible jobs
     public function index()
     {
-       $jobs = Job::all();
+       $jobs = Job::with("skills" , "countries")->get();
        return $jobs;
     }
 
