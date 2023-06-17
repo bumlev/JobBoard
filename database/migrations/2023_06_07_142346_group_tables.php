@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 class GroupTables extends Migration
@@ -35,6 +36,14 @@ class GroupTables extends Migration
             $table->timestamps();
         });
 
+        $skills = config("dataTables.dataSkills");
+        foreach ($skills as $skill) {
+            DB::table('skills')->insert([
+                'id' => $skill[0],
+                'name' => $skill[1]
+            ]);
+        }
+
         Schema::create('profile_skills', function (Blueprint $table) {
             $table->increments("id");
             $table->unsignedBigInteger('profile_id');
@@ -52,12 +61,28 @@ class GroupTables extends Migration
             $table->timestamps();
         });
 
+        $countries = config("dataTables.dataCountries");
+        foreach ($countries as $country) {
+            DB::table('countries')->insert([
+                'id' => $country[0],
+                'code' => $country[1],
+                'name' => $country[2],
+            ]);
+        }
+
         Schema::create('degrees', function (Blueprint $table) {
             $table->id();
             $table->string('name', 40);
             $table->timestamps();
         });
 
+        $degrees = config("dataTables.dataDegrees");
+        foreach ($degrees as $degree) {
+            DB::table('degrees')->insert([
+                'id' => $degree[0],
+                'name' => $degree[1],
+            ]);
+        }
         Schema::create('jobs', function (Blueprint $table) {
             $table->increments('id');
             $table->string('title', 250);

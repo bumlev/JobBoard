@@ -178,7 +178,8 @@ return [
         //Added Service Providers
         Laracasts\Flash\FlashServiceProvider::class,
         Cartalyst\Sentinel\Laravel\SentinelServiceProvider::class,
-        Intervention\Image\ImageServiceProvider::class
+        Intervention\Image\ImageServiceProvider::class,
+        App\Providers\ExceptionServiceProvider::class,
     ],
 
     /*

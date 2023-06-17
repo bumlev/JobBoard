@@ -3,7 +3,6 @@
 namespace Database\Factories;
 
 use App\Models\Profile;
-use Illuminate\Contracts\Cache\Store;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
@@ -15,9 +14,9 @@ class ProfileFactory extends Factory
      *
      * @var string
      */
-
     protected $model = Profile::class;
 
+    
     /**
      * Define the model's default state.
      *

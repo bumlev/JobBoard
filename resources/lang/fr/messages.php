@@ -8,9 +8,11 @@ return [
     'errorLogin' => "Votre mot de passe ou email est incorrect",
     "ErrorUpdate" => "L'email existe déjà !",
     'logout'=>"Déconnecté",
+    "MethodException" => "Méthode non autorisée pour ta requete", 
     'NoJobs'=> "Offres d'emploi introuvables ...",
     'NoProfile' => "Créez d'abord votre profil",
     "AuthorizationRole" => "En tant que ",
     'ProfileExists' => "Votre profil existe déjà ",
-    'savedData' => 'Vous avez déjà enregistré ou postulé ce travail'
+    "QueryException" => "Erreur de connexion à la base de données.",
+    'savedData' => 'Vous avez déjà enregistré ou postulé ce travail',
 ];

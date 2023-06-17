@@ -21,6 +21,7 @@
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Support\Facades\DB;
 
 class MigrationCartalystSentinel extends Migration
 {
@@ -73,6 +74,17 @@ class MigrationCartalystSentinel extends Migration
             $table->engine = 'InnoDB';
             $table->unique('slug');
         });
+
+        $roles = config("dataTables.dataRoles");
+        foreach($roles as $role)
+        {
+            DB::table('roles')->insert([
+                'id' => $role[0],
+                'name' => $role[1],
+                'slug' => $role[2],
+                "permissions" => $role[3]
+            ]);
+        }
 
         Schema::create('role_users', function (Blueprint $table) {
             $table->integer('user_id')->unsigned();

@@ -4,7 +4,6 @@ namespace Tests\Feature\Middlewares;
 use App\Http\Controllers\UsersController;
 use App\Http\Middleware\AllPermissionsMiddleware;
 use App\Models\User;
-use Database\Factories\RoleFactory;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\Request;
 use Tests\TestCase;
@@ -16,9 +15,6 @@ class AllPermissionsTest extends TestCase
     /** @test */
     public function if_not_have_a_permission()
     {
-        $dataRoles = RoleFactory::new()->arrayState();
-        RoleFactory::new()->createMany($dataRoles);
-
         $data = User::factory()->make()->toArray();
         $data["password"] = "levy_600";
         $data["roles"] = [3];
@@ -44,9 +40,6 @@ class AllPermissionsTest extends TestCase
     /** @test */
     public function if_have_a_permission()
     {
-        $dataRoles = RoleFactory::new()->arrayState();
-        RoleFactory::new()->createMany($dataRoles);
-
         $data = User::factory()->make()->toArray();
         $data["password"] = "levy_600";
         $data["roles"] = [2];

@@ -9,9 +9,7 @@ use App\Models\User;
 use Cartalyst\Sentinel\Laravel\Facades\Sentinel;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\Request;
-use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
 use Illuminate\Support\Str;
 
@@ -145,9 +143,7 @@ class JobsControllerTest extends TestCase
         $this->assertNotEmpty($response->profiles);
 
     }
-
-
-
+    
     /** @test */
     public function apply_job_without_profile()
     {

@@ -20,7 +20,6 @@ class AuthenticationControllerTest extends TestCase
         $data["password"] = "levy_600";
 
         $user = Sentinel::registerAndActivate($data);
-
         $request  = new Request([
             "email" => $user->email,
             "password" => "levy_600"

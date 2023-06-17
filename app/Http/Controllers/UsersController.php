@@ -49,7 +49,7 @@ class UsersController extends Controller
         if(gettype($data) == "object")
         {
             $errors = $data->errors();
-            return json_decode($errors);
+            return $errors;
         }
         
         $currentUser = Sentinel::getUser();
@@ -62,7 +62,6 @@ class UsersController extends Controller
             Sentinel::update($currentUser , $data);
             $currentUser->roles()->sync($roles);
             return $currentUser;
-
         }else{
             return response()->json(["ErrorUpdate" => __("messages.ErrorUpdate")]);
         }

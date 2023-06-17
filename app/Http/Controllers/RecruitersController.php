@@ -109,7 +109,7 @@ class RecruitersController extends Controller
             "content" => $content
         ];
         
-        $message = Message::create($data);
+        Message::create($data);
         return Message::with("user" , "conversation")->where('conversation_id' , $conversation->id)->get();
 
     }

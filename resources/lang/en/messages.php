@@ -8,9 +8,11 @@ return [
     'errorLogin' => "Your password or email is incorrect",
     "ErrorUpdate" => "The email already exits !",
     'logout'=>"Logged out",
+    "MethodException" => "Unauthorized Method for your request", 
     'NoJobs'=> "Jobs not found ...",
     'NoProfile' => "First create your profile",
     "AuthorizationRole" => "As a ",
     'ProfileExists' => "Your profile already exists ",
-    'savedData' => 'You already saved or applied that job'
+    "QueryException" => "Database connection error",
+    'savedData' => 'You already saved or applied that job',
 ];
