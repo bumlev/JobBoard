@@ -111,27 +111,38 @@ class RecruitersController extends Controller
         
         Message::create($data);
         return Message::with("user" , "conversation")->where('conversation_id' , $conversation->id)->get();
-
     }
     
-    // Validate data
-    static private function ValidateData($request)
+    //attributes for data Validation
+    static private function attributes($request):array
     {
         $currentUser = Sentinel::getUser();
-        $data = [
+        return [
             "title" => $request->input("title"),
             "content" => $request->input("content"),
             "skills" => array_map("intval" , $request->input("skills")),
             "countries" => array_map("intval" , $request->input("countries")),
             "user_id" => $currentUser->id
         ];
+    }
 
-        $data_rules = [
+    // Rules for data Validation
+    static private function rules():array
+    {
+        return [
             "title" => "Required|Min:5",
             "content" => "Required",
             "skills.*" => "Required|numeric|not_in:0",
             "countries.*" => "Required|numeric|not_in:0"
         ];
+    }
+    
+    // Validate data
+    static private function ValidateData($request)
+    {
+        $data = self::attributes($request);
+        $data_rules = self::rules();
+
         $validator = Validator::make($data , $data_rules);
         return $validator->fails() ? $validator :$data;
     }

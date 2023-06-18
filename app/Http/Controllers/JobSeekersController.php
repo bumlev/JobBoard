@@ -110,13 +110,14 @@ class JobSeekersController extends Controller
       
     }
 
-    // Validate data
-    static private function ValidateData($request)
+    // Get attributes for data Validation 
+    static private function attributes($request):array
     {
         $currentUser = Sentinel::getUser();
         $file = $request->file();
         $fileName = $currentUser->first_name.Carbon::now()->format("YmdHisv");
-        $data = [
+
+        return [
             "education" => $request->input("education"),
             "degree_id" => intval($request->input("level")),
             "cv" => [
@@ -132,7 +133,12 @@ class JobSeekersController extends Controller
             "country_id" => intval($request->input("country_id")),
             "skills" => array_map("intval" , $request->input("skills"))     
         ];
-        $data_rules = [
+    }
+
+    // Get Rules for Validation data
+    static private function rules():array
+    {
+        return [
             "education" => "Required|min:6",
             "degree_id" => "Required|numeric|not_in:0",
             "cv.file" => 'required|mimes:jpeg,png,pdf,docx|max:2048',
@@ -144,10 +150,17 @@ class JobSeekersController extends Controller
             "country_id" => "Required|numeric|not_in:0",
             "skills.*" => "Required|numeric|not_in:0"
         ];
-
+    }
+    
+    // Validate data
+    static private function ValidateData($request)
+    {
+        $data = self::attributes($request);
+        $data_rules = self::rules();
         $data_customise = [
             "user_id.unique" => __("Messages.ProfileExists")
         ];
+
         $validator  = Validator::make($data , $data_rules , $data_customise);
         return $validator->fails() ? $validator : $data;
     }
