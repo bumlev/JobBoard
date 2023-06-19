@@ -6,7 +6,6 @@ return [
     'AuthorizationError' => 'You are not authorized to access this page...',
     "ErrorAdmin" => "you are not allowed to set yourself as admin",
     'errorLogin' => "Your password or email is incorrect",
-    "ErrorUpdate" => "The email already exits !",
     'logout'=>"Logged out",
     "MethodException" => "Unauthorized Method for your request", 
     'NoJobs'=> "Jobs not found ...",

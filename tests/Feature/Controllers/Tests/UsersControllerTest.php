@@ -88,31 +88,4 @@ class UsersControllerTest extends TestCase
         $response = $usersController->update($request , $user->id);
         $this->assertEquals($response->getFormat() , ":message");
     }
-
-    /** @test */
-    public function update_a_user_with_email_of_other_of_users()
-    {
-        $dataUser = User::factory()->make()->toArray();
-        $dataUser["password"] = "levy_600";
-
-        $dataUser1 = User::factory()->make()->toArray();
-        $dataUser1["password"] = "levy_600";
-
-        $user = Sentinel::registerAndActivate($dataUser);
-        $user->roles()->attach([2]);
-        $dataUser["roles"] = [2];
-
-        $user1 = Sentinel::registerAndActivate($dataUser1);
-        $user1->roles()->attach([2]);
-        $dataUser1["roles"] = [2];
-
-        $this->post("/authenticate" , ["email" => $user->email , "password" => $dataUser["password"]]);
-        $dataUser["email"] = $user1->email;
-
-        $request = new Request($dataUser);
-        $usersController = new UsersController();
-        $response = $usersController->update($request , $user->id);
-        $response = $response->getData()->ErrorUpdate;
-        $this->assertEquals($response , "The email already exits !");
-    }
 }

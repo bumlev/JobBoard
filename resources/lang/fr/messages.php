@@ -6,7 +6,6 @@ return [
     'AuthorizationError' => "Vous n'êtes pas autorisé à accéder à cette page...",
     "ErrorAdmin" => "vous n'êtes pas autorisé à vous définir comme administrateur",
     'errorLogin' => "Votre mot de passe ou email est incorrect",
-    "ErrorUpdate" => "L'email existe déjà !",
     'logout'=>"Déconnecté",
     "MethodException" => "Méthode non autorisée pour ta requete", 
     'NoJobs'=> "Offres d'emploi introuvables ...",
