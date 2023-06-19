@@ -26,6 +26,7 @@ class SaveJob
         }
     }
 
+    
     /// Check if there is a registration  of two data of pivot table
     static private function ifNotDataOfPivotTable($profile_id , $job_id)
     {

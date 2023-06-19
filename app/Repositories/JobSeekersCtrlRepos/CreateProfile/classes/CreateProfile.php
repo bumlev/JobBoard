@@ -17,14 +17,15 @@ class CreateProfile
             $errors = $data->errors();
             return $errors;
         } 
-        $skills = $data["skills"];
-        unset($data["skills"]);
 
         $data["cv"] = self::getUrlFile($data['cv']);
         $data["cover_letter"] = self::getUrlFile($data['cover_letter']);
 
         $currentUser_id = Sentinel::getUser()->id;
         $currentUser = User::find($currentUser_id);
+        
+        $skills = $data["skills"];
+        unset($data["skills"]);
 
         $profile  = $currentUser->profile()->create($data);
         $profile->skills()->attach($skills);

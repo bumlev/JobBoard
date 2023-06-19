@@ -2,7 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use Cartalyst\Sentinel\Laravel\Facades\Sentinel;
+use App\Repositories\SessionsCtrlRepos\Authenticate\Classes\Authenticate;
+use App\Repositories\SessionsCtrlRepos\Logout\Classes\Logout;
 use Illuminate\Http\Request;
 
 
@@ -16,18 +17,14 @@ class SessionsController extends Controller
     // Authenticate as a User
     public function authenticate(Request $request)
     {
-        $data = [
-            "email" => $request->input("email"),
-            "password" => $request->input("password")
-        ];
-        $authenticate = Sentinel::authenticate($data); 
-        return $authenticate ? $authenticate : response()->json(['errorLogin' => __('messages.errorLogin')]);
+       $response = Authenticate::execute($request);
+       return $response;
     }
 
     // Logout
     public function logout()
     {
-        Sentinel::logout(Null, true);
-        return response()->json(['logout'=> __('messages.logout')]);
+       $response = Logout::execute();
+       return $response;
     }
 }

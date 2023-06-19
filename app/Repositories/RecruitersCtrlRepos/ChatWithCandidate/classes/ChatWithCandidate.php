@@ -22,7 +22,6 @@ class ChatWithCandidate
         unset($data["content"]);
 
         $conversation = self::createChat($data);
-
         $data = [
             "user_id" => $currentUser->id,
             "conversation_id" => $conversation->id,

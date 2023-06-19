@@ -55,5 +55,4 @@ class JobSeekersController extends Controller
        $response = SaveJob::execute($id);
        return $response;
     }
-
 }

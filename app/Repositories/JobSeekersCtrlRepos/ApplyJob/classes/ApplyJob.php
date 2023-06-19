@@ -22,15 +22,15 @@ class ApplyJob
 
             $profile->jobs()->attach(intval($job_id) , ["apply" => Job::APPLY]);
             return $profile->jobs()->where('job_id' , intval($job_id))->first();
-
+            
         }else{
 
             $profile->jobs()->updateExistingPivot(intval($job_id) , ["apply" => Job::APPLY]); 
             echo __('messages.AppliedJob');
             return $profile->jobs()->where('job_id' , intval($job_id))->first();
-               
         }    
     }
+
 
     /// Check if there is a registration  of two data of pivot table
     static private function ifNotDataOfPivotTable($profile_id , $job_id)
