@@ -5,7 +5,6 @@ use App\Models\Profile;
 
 class SearchProfile
 {
-
     static public function execute($request)
     {
         $name = $request->input("name");

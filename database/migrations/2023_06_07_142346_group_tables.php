@@ -83,6 +83,7 @@ class GroupTables extends Migration
                 'name' => $degree[1],
             ]);
         }
+        
         Schema::create('jobs', function (Blueprint $table) {
             $table->increments('id');
             $table->string('title', 250);

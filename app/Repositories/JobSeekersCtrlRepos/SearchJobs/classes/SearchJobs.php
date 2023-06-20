@@ -5,7 +5,6 @@ use App\Models\Job;
 
 class SearchJobs
 {
-
     static public function execute($request)
     {
         $country = $request->input("country");

@@ -4,6 +4,7 @@ namespace App\Exceptions;
 
 use App\Exceptions\ErrorException\classes\MethodErrorException;
 use App\Exceptions\ErrorException\classes\QueryErrorException;
+
 use Illuminate\Database\QueryException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Http\Request;

@@ -31,8 +31,8 @@ class JobSeekersController extends Controller
     /// Search jobs 
     public function searchJobs(Request $request)
     {
-        $jobs = SearchJobs::execute($request);
-        return $jobs;
+        $response = SearchJobs::execute($request);
+        return $response;
     }
 
     //Apply a job

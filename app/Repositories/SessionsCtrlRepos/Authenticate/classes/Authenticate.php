@@ -5,7 +5,6 @@ use Cartalyst\Sentinel\Laravel\Facades\Sentinel;
 
 class Authenticate
 {
-
     static public function execute($request)
     {
         $data = [
