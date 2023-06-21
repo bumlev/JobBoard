@@ -46,11 +46,6 @@ class User extends EloquentUser
         return $this->hasMany(Job::class);
     }
 
-    /*public function appliedJobs()
-    {
-        return $this->belongsToMany(Job::class , "applied_jobs")->withPivot(["save"]);
-    }*/
-
     public function profile()
     {
         return $this->hasOne(Profile::class);

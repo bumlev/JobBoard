@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Controllers;
 
 use App\Models\User;
@@ -26,9 +25,9 @@ class UsersController extends Controller
 
     // Create a user
     public function store(Request $request)
-    {
+    { 
        $user = StoreUser::execute($request);
-       return $user;  
+       return $user;
     }
 
     // Update a user 

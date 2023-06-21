@@ -8,7 +8,6 @@ use Illuminate\Support\Facades\Validator;
 
 class CreateProfile
 {
-
     static public function execute($request)
     {
         $data  = self::ValidateData($request);

@@ -7,7 +7,6 @@ use Cartalyst\Sentinel\Laravel\Facades\Sentinel;
 
 class SaveJob
 {
-
     static public function execute($job_id)
     {
         $user = User::with("profile")->find(Sentinel::getUser()->id);
@@ -25,7 +24,6 @@ class SaveJob
             return response()->json(["savedData"=> __("messages.savedData")]);
         }
     }
-
     
     /// Check if there is a registration  of two data of pivot table
     static private function ifNotDataOfPivotTable($profile_id , $job_id)
