@@ -6,7 +6,6 @@ use App\Models\Profile;
 
 class FindRightCandidates
 {
-
     static public function execute($job_id)
     {
         $job = Job::find($job_id);
