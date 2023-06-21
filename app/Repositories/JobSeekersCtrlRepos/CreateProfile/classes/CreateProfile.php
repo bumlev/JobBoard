@@ -74,7 +74,7 @@ class CreateProfile
         ];
     }
       
-      // Validate data
+    // Validate data
     static private function ValidateData($request)
     {
         $data = self::attributes($request);

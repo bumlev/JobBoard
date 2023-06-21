@@ -3,11 +3,12 @@ namespace App\Repositories\RecruitersCtrlRepos\PostJob\Classes;
 
 use App\Models\Job;
 use Cartalyst\Sentinel\Laravel\Facades\Sentinel;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
 class PostJob
 {
-    static public function execute($request)
+    static public function execute(Request $request)
     {
         $data = self::ValidateData($request);
         if(gettype($data) == "object")
