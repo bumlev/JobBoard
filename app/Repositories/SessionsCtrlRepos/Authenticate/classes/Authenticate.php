@@ -11,6 +11,7 @@ class Authenticate
             "email" => $request->input("email"),
             "password" => $request->input("password")
         ];
+        
         $authenticate = Sentinel::authenticate($data); 
         return $authenticate ? $authenticate : response()->json(['errorLogin' => __('messages.errorLogin')]);
     }

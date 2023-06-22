@@ -7,8 +7,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 
 class UpdateUser
-{
-    
+{ 
     // Update a user
     static public function execute($request)
     {
@@ -18,7 +17,6 @@ class UpdateUser
             $errors = $data->errors();
             return $errors;
         }
-
         $roles = $data["roles"];
         unset($data["roles"]);
 

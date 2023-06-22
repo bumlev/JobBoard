@@ -8,7 +8,6 @@ use Illuminate\Support\Facades\Validator;
 
 class ChatWithCandidate
 {
-
     static public function execute($request)
     {
         $currentUser = Sentinel::getUser();
@@ -32,7 +31,6 @@ class ChatWithCandidate
         return Message::with("user" , "conversation")->where('conversation_id' , $conversation->id)->get();
     }
 
-
     // Create a conversation
     static private function createChat($data)
     {
@@ -48,7 +46,6 @@ class ChatWithCandidate
             return Conversation::with("messages")->find($conversation->id);
         }
     }
-    
 
     // Validate data chat 
     static private function ValidateDataChat($request)
