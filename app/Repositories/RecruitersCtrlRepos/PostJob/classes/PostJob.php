@@ -29,7 +29,7 @@ class PostJob
     }
 
     //attributes for data Validation
-    static private function attributes($request):array
+    static private function attributes(Request $request):array
     {
         $currentUser = Sentinel::getUser();
         return [
@@ -53,12 +53,12 @@ class PostJob
     }
 
     // Validate data
-     static private function ValidateData($request)
+     static private function ValidateData(Request $request)
      {
          $data = self::attributes($request);
          $data_rules = self::rules();
  
          $validator = Validator::make($data , $data_rules);
-         return $validator->fails() ? $validator :$data;
+         return $validator->fails() ? $validator : $data;
      }
 }

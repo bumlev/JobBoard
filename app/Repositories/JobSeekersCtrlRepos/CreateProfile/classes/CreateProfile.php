@@ -4,11 +4,12 @@ namespace App\Repositories\JobSeekersCtrlRepos\CreateProfile\Classes;
 use App\Models\User;
 use Carbon\Carbon;
 use Cartalyst\Sentinel\Laravel\Facades\Sentinel;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
 class CreateProfile
 {
-    static public function execute($request)
+    static public function execute(Request $request)
     {
         $data  = self::ValidateData($request);
         if(gettype($data) == "object")
@@ -32,7 +33,7 @@ class CreateProfile
     }
 
     // Get attributes for data Validation 
-    static private function attributes($request):array
+    static private function attributes(Request $request):array
     {
         $currentUser = Sentinel::getUser();
         $file = $request->file();
@@ -74,7 +75,7 @@ class CreateProfile
     }
       
     // Validate data
-    static private function ValidateData($request)
+    static private function ValidateData(Request $request)
     {
         $data = self::attributes($request);
         $data_rules = self::rules();

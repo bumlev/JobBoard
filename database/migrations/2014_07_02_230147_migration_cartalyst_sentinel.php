@@ -122,14 +122,14 @@ class MigrationCartalystSentinel extends Migration
             $table->unique('email');
         });
 
-        /*$users = config("dataTables.dataUsers");
+        $users = config("dataTables.dataUsers");
         $data = [
             "email" => $users[0][1],
             "password" => $users[0][2],
             "first_name" => $users[0][5],
             "last_name" => $users[0][6]
         ];
-        Sentinel::registerAndActivate($data)->roles()->attach(Role::IS_SET_ADMIN);*/
+        Sentinel::registerAndActivate($data)->roles()->attach(Role::IS_SET_ADMIN);
     }
 
     /**

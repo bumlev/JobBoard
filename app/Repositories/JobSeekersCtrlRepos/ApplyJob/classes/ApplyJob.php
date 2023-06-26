@@ -21,8 +21,7 @@ class ApplyJob
         if($ifNotDataPivotTable){
 
             $profile->jobs()->attach(intval($job_id) , ["apply" => Job::APPLY]);
-            return $profile->jobs()->where('job_id' , intval($job_id))->first();
-            
+            return $profile->jobs()->where('job_id' , intval($job_id))->first();  
         }else{
 
             $profile->jobs()->updateExistingPivot(intval($job_id) , ["apply" => Job::APPLY]); 

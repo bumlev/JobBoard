@@ -26,8 +26,8 @@ class UsersController extends Controller
     // Create a user
     public function store(Request $request)
     { 
-       $user = StoreUser::execute($request);
-       return $user;
+        $user = StoreUser::execute($request);
+        return $user;
     }
 
     // Update a user 

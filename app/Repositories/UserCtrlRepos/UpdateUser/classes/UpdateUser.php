@@ -3,13 +3,14 @@ namespace App\Repositories\UserCtrlRepos\UpdateUser\Classes;
 
 use App\Models\Role;
 use Cartalyst\Sentinel\Laravel\Facades\Sentinel;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 
 class UpdateUser
 { 
     // Update a user
-    static public function execute($request)
+    static public function execute(Request $request)
     {
         $data = self::ValidateData($request);
         if(gettype($data) == "object")
@@ -27,7 +28,7 @@ class UpdateUser
     }
 
     //Get attributes for data Validation
-    static private function attributes($request):array
+    static private function attributes(Request $request):array
     {
         $roles = array_map("intval" , $request->input("roles"));
         in_array(Role::IS_SET_ADMIN , $roles) ? 
@@ -56,7 +57,7 @@ class UpdateUser
     }
 
     // Validate data
-    static private function ValidateData($request)
+    static private function ValidateData(Request $request)
     {
         $data = self::attributes($request);
         $data_rules = self::rules();

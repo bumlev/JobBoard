@@ -2,10 +2,11 @@
 namespace App\Repositories\RecruitersCtrlRepos\SearchProfile\Classes;
 
 use App\Models\Profile;
+use Illuminate\Http\Request;
 
 class SearchProfile
 {
-    static public function execute($request)
+    static public function execute(Request $request)
     {
         $name = $request->input("name");
         $profiles = Profile::with("user")

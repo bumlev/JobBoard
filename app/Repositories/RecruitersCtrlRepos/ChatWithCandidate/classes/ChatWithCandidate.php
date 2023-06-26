@@ -4,11 +4,12 @@ namespace App\Repositories\RecruitersCtrlRepos\ChatWithCandidate\Classes;
 use App\Models\Conversation;
 use App\Models\Message;
 use Cartalyst\Sentinel\Laravel\Facades\Sentinel;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
 class ChatWithCandidate
 {
-    static public function execute($request)
+    static public function execute(Request $request)
     {
         $currentUser = Sentinel::getUser();
         $data = self::ValidateDataChat($request);
@@ -48,7 +49,7 @@ class ChatWithCandidate
     }
 
     // Validate data chat 
-    static private function ValidateDataChat($request)
+    static private function ValidateDataChat(Request $request)
     {
         $data = [
             "receiver_id" => intval($request->input("receiver")),
