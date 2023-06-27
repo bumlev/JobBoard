@@ -66,6 +66,8 @@ Route::middleware("setlocale")->group(function(){
         Route::post("/createProfile" , [JobSeekersController::class , "createProfile"])
         ->middleware("allpermissions:jobs.createProfile");
 
+        Route::post("/searchJobs" , [JobSeekersController::class , "searchJobs"]);
+
         Route::get("/applyJob/{id}" , [JobSeekersController::class , "applyJob"])
         ->middleware("allpermissions:jobs.applyJob");
 
