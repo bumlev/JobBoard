@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Controllers;
 
 use App\Repositories\SessionsCtrlRepos\Authenticate\Classes\Authenticate;
@@ -8,11 +7,7 @@ use Illuminate\Http\Request;
 
 class SessionsController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware("setlocale");
-    }
-    
+     
     // Authenticate as a User
     public function authenticate(Request $request)
     {

@@ -2,10 +2,11 @@
 namespace App\Repositories\JobSeekersCtrlRepos\SearchJobs\Classes;
 
 use App\Models\Job;
+use Illuminate\Http\Request;
 
 class SearchJobs
 {
-    static public function execute($request)
+    static public function execute(Request $request)
     {
         $country = $request->input("country");
         $title = $request->input("title");

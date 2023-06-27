@@ -10,16 +10,7 @@ use Illuminate\Http\Request;
 
 class JobSeekersController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware("setlocale");
-        $this->middleware("sentinel");
-        $this->middleware("allpermissions:jobs.createProfile" , ["only" => "createProfile"]);
-        $this->middleware("allpermissions:jobs.applyJob" , ["only" => "applyJob"]);
-        $this->middleware("allpermissions:jobs.appliedJobs" , ["only" => "appliedJobs"]);
-        $this->middleware("allpermissions:jobs.saveJob" , ["only" => "saveJob"]);
-    }
-
+    
     // Create a profile
     public function createProfile(Request $request)
     {

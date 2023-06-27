@@ -15,8 +15,7 @@ class AppliedJobs
         if(empty(json_decode($profile)))
             return response()->json(['NoProfile' => __('messages.NoProfile')]);
             
-        $appliedJobs = $profile->jobs()->where("profile_id", $profile->id)
-                                        ->where('apply' , Job::APPLY)->get();
+        $appliedJobs = $profile->jobs()->where('apply' , Job::APPLY)->get();
         return $appliedJobs;
     }
 }

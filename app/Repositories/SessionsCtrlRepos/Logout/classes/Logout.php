@@ -5,10 +5,9 @@ use Cartalyst\Sentinel\Laravel\Facades\Sentinel;
 
 class Logout
 {
-
     static public function execute()
     {
-        Sentinel::logout(Null, true);
+        Sentinel::logout();
         return response()->json(['logout'=> __('messages.logout')]);
     }
 }

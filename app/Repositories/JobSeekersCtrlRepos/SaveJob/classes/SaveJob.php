@@ -15,7 +15,7 @@ class SaveJob
         if(empty(json_decode($profile)))
             return response()->json(['NoProfile' => __('messages.NoProfile')]);
 
-        $ifNotDataPivotTable = self::ifNotDataOfPivotTable($profile->id , intval($job_id));
+        $ifNotDataPivotTable = self::ifNotDataOfPivotTable($profile , intval($job_id));
 
         if($ifNotDataPivotTable){
             $profile->jobs()->attach(intval($job_id), ["save" => Job::SAVE]);
@@ -26,14 +26,9 @@ class SaveJob
     }
     
     /// Check if there is a registration  of two data of pivot table
-    static private function ifNotDataOfPivotTable($profile_id , $job_id)
+    static private function ifNotDataOfPivotTable($profile , $job_id)
     {
-        $job = Job::with([
-            'profiles' => function($query) use($profile_id , $job_id){
-                $query->where('profile_id' , $profile_id)
-                ->where('job_id' , $job_id);
-            }
-        ])->find($job_id);
-        return $job->profiles->isEmpty();
+        $job =$profile->jobs()->where('job_id' , $job_id)->first();
+        return is_null($job);
     }
 }

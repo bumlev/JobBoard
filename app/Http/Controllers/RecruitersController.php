@@ -12,15 +12,7 @@ use Illuminate\Http\Request;
 
 class RecruitersController extends Controller
 {  
-    public function __construct()
-    {
-        $this->middleware("setlocale");
-        $this->middleware("sentinel");
-        $this->middleware("allpermissions:jobs.index" , ["only" => "index"]);
-        $this->middleware("allpermissions:jobs.postJob" , ["only" => "postJob"]);
-        $this->middleware("allpermissions:jobs.rightCandidates" , ["only" => "findRightCandidates"]);
-    }
-
+    
     // Display all avalaible jobs
     public function index()
     {

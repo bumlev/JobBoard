@@ -6,7 +6,6 @@ use Intervention\Image\Facades\Image;
 
 class GetSoredImage
 {
-
     static public function execute($imageName)
     {
         $imagePath = 'public/images/'.$imageName;

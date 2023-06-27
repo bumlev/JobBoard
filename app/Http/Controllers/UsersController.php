@@ -8,14 +8,7 @@ use Illuminate\Http\Request;
 
 class UsersController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware("setlocale");
-        $this->middleware('sentinel')->except(["store"]);
-        $this->middleware('allpermissions:users.index', ['only' => 'index']);
-        $this->middleware('allpermissions:users.show', ['only' => 'show']);
-    }
-
+    
     //Display all Users
     public function index()
     {
