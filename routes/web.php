@@ -29,7 +29,8 @@ Route::get('/coverage' , function(){
 
 Route::get('lang/{lang}' , [LanguageController::class , 'switchLanguage']);
 
-// Middleware for setting Locale
+//------- Middleware for setting Locale ----------------- ///
+
 Route::middleware("setlocale")->group(function(){
 
     Route::post('/create_user' , [UsersController::class , "store"]);
@@ -37,7 +38,8 @@ Route::middleware("setlocale")->group(function(){
     Route::get('/logout' , [SessionsController::class , "logout"]);
 
 
-    // Middleware for checking if user is authenticated
+//--Middleware for checking if user is authenticated-----------------//
+
     Route::middleware("sentinel")->group(function(){
 
         Route::get("storage/app/public/images/{img}" , [FilesController::class , "getStoredImage"]);
@@ -49,7 +51,8 @@ Route::middleware("setlocale")->group(function(){
         Route::put('/updateUser' , [UsersController::class , "update"]);
 
 
-        //Routes for Recruiters
+//----------------------------------------Routes for Recruiters--------------------------------------------//
+
         Route::get("/jobs" , [RecruitersController::class , "index"])
         ->middleware("allpermissions:jobs.index");
 
@@ -65,7 +68,8 @@ Route::middleware("setlocale")->group(function(){
         Route::post("/searchProfile" , [RecruitersController::class , "searchProfile"]);
 
 
-        //Routes for JobSeekers
+//----------------------------------------Routes for JobSeekers---------------------------------------------//
+
         Route::post("/createProfile" , [JobSeekersController::class , "createProfile"])
         ->middleware("allpermissions:jobs.createProfile");
 
