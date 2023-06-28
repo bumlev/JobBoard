@@ -51,28 +51,17 @@ class UpdateUser
         ];
     }
 
-    //get Customized messages
-    static private function CustomizedMsgErrorAdmin($validator)
-    {
-        $validator->after(function($validator)
-        {
-            $roles = $validator->getData()["roles"];
-            if(in_array(Role::IS_SET_ADMIN , $roles))
-            {
-                $key = array_search(Role::IS_SET_ADMIN , $roles);
-                $validator->errors()->add('roles.'.$key , __('messages.ErrorAdmin'));
-            }
-        });
-    }
-
     // Validate data
     static private function ValidateData(Request $request)
     {
         $data = self::attributes($request);
         $data_rules = self::rules();
-        $validator = Validator::make($data , $data_rules);
-        self::CustomizedMsgErrorAdmin($validator);
-        
+        $customized_data = [
+            "roles.*.not_in" => in_array(Role::IS_SET_ADMIN , $data["roles"]) ? __('messages.ErrorAdmin') : 
+            __("validation.not_in")
+        ];
+
+        $validator = Validator::make($data , $data_rules , $customized_data);
         return $validator->fails() ? $validator : $data ;
     }
 }
