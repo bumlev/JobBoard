@@ -24,11 +24,8 @@ class CreateProfile
         $data["cv"] = self::getUrlFile($data['cv']);
         $data["cover_letter"] = self::getUrlFile($data['cover_letter']);
         
-        $skills = $data["skills"];
-        unset($data["skills"]);
-
         $profile  = $currentUser->profile()->create($data);
-        $profile->skills()->attach($skills);
+        $profile->skills()->attach($data["skills"]);
         return $profile;
     }
 

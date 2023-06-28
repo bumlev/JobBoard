@@ -18,14 +18,11 @@ class ChatWithCandidate
             return $data->errors();
 
         $data["sender_id"] = $currentUser->id;
-        $content = $data["content"];
-        unset($data["content"]);
-
         $conversation = self::createChat($data);
         $data = [
             "user_id" => $currentUser->id,
             "conversation_id" => $conversation->id,
-            "content" => $content
+            "content" => $data["content"]
         ];
         
         Message::create($data);

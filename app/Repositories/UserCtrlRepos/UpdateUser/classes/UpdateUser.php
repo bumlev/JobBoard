@@ -18,12 +18,10 @@ class UpdateUser
             $errors = $data->errors();
             return $errors;
         }
-        $roles = $data["roles"];
-        unset($data["roles"]);
 
         $currentUser = Sentinel::getUser();
         Sentinel::update($currentUser , $data);
-        $currentUser->roles()->sync($roles);
+        $currentUser->roles()->sync($data["roles"]);
         return $currentUser;
     }
 

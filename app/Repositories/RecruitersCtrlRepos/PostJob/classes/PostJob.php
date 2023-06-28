@@ -17,14 +17,9 @@ class PostJob
             return $errors;
         }
 
-        $skills = $data["skills"];
-        $countries = $data["countries"];
-        $keystoRemove = ["skills" , "countries"];
-        $data = array_diff_key($data , array_flip($keystoRemove));
-
         $job = Job::create($data);
-        $job->skills()->attach($skills);
-        $job->countries()->attach($countries);
+        $job->skills()->attach($data["skills"]);
+        $job->countries()->attach($data["countries"]);
         return $job;
     }
 

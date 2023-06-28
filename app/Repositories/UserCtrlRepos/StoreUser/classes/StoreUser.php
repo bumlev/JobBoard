@@ -17,11 +17,9 @@ class StoreUser
             $errors = $data->errors();
             return $errors;
         }
-        $roles = $data["roles"];
-        unset($data["roles"]);
 
         $user = Sentinel::registerAndActivate($data);
-        $user->roles()->attach($roles);
+        $user->roles()->attach($data["roles"]);
         return $user;   
     }
 
