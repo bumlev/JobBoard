@@ -29,9 +29,6 @@ class UpdateUser
     static private function attributes(Request $request):array
     {
         $roles = array_map("intval" , $request->input("roles"));
-        in_array(Role::IS_SET_ADMIN , $roles) ? 
-        die(__('messages.ErrorAdmin')) : "";
-        
         return [
             "email" => $request->input("email"),
             "password" => $request->input("password"),
@@ -50,7 +47,7 @@ class UpdateUser
             "password" => "Required|Min:6",
             "first_name" => "Required|Min:3",
             "last_name" => "Required|Min:3",
-            "roles.*" => "required|numeric|not_in:0"
+            "roles.*" => ["required", "numeric" , Rule::notIn([0 , Role::IS_SET_ADMIN])],
         ];
     }
 
@@ -59,8 +56,17 @@ class UpdateUser
     {
         $data = self::attributes($request);
         $data_rules = self::rules();
-        
         $validator = Validator::make($data , $data_rules);
+        $validator->after(function($validator)
+        {
+            $roles = $validator->getData()["roles"];
+            if(in_array(Role::IS_SET_ADMIN , $roles))
+            {
+                $key = array_search(Role::IS_SET_ADMIN , $roles);
+                $validator->errors()->add('roles.'.$key , __('messages.ErrorAdmin'));
+            }
+        });
+
         return $validator->fails() ? $validator : $data ;
     }
 }
