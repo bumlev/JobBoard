@@ -33,20 +33,23 @@ Route::get('lang/{lang}' , [LanguageController::class , 'switchLanguage']);
 Route::middleware("setlocale")->group(function(){
 
     Route::post('/create_user' , [UsersController::class , "store"]);
-
     Route::post("/authenticate" , [SessionsController::class , "authenticate"]);
     Route::get('/logout' , [SessionsController::class , "logout"]);
+
 
     // Middleware for checking if user is authenticated
     Route::middleware("sentinel")->group(function(){
 
         Route::get("storage/app/public/images/{img}" , [FilesController::class , "getStoredImage"]);
 
+        //Routes for Users
         Route::get('/users' , [UsersController::class , "index"])
         ->middleware("allpermissions:users.index");
 
         Route::put('/updateUser' , [UsersController::class , "update"]);
 
+
+        //Routes for Recruiters
         Route::get("/jobs" , [RecruitersController::class , "index"])
         ->middleware("allpermissions:jobs.index");
 
@@ -63,6 +66,8 @@ Route::middleware("setlocale")->group(function(){
 
         Route::post("/searchProfile" , [RecruitersController::class , "searchProfile"]);
 
+
+        //Routes for JobSeekers
         Route::post("/createProfile" , [JobSeekersController::class , "createProfile"])
         ->middleware("allpermissions:jobs.createProfile");
 

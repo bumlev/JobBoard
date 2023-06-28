@@ -116,6 +116,9 @@ Follow the steps below to clone and run your Laravel application:
     10.Open your web browser and navigate to the URL http://localhost:8000 to see your running 
     Laravel application.
 
+    11. This the Link of the API Documentation : 
+    https://documenter.getpostman.com/view/27278225/2s93eZxWqB#7b3a595f-60fe-4814-9ada-55f79f4cc2cc
+
 
 
 
