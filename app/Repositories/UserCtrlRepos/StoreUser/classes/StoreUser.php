@@ -49,7 +49,7 @@ class StoreUser
     }
 
     //get Customized messages
-    static private function messages($validator)
+    static private function CustomizedMsgErrorAdmin($validator)
     {
         $validator->after(function($validator)
         {
@@ -60,7 +60,6 @@ class StoreUser
                 $validator->errors()->add('roles.'.$key , __('messages.ErrorAdmin'));
             }
         });
-        return $validator;
     }
 
     // Validate data
@@ -69,7 +68,7 @@ class StoreUser
         $data = self::attributes($request);
         $data_rules = self::rules();
         $validator = Validator::make($data , $data_rules);
-        $validator = self::messages($validator);
+        self::CustomizedMsgErrorAdmin($validator);
 
         return $validator->fails() ? $validator : $data ;
     }

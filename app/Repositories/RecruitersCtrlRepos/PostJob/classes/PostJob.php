@@ -48,12 +48,12 @@ class PostJob
     }
 
     // Validate data
-     static private function ValidateData(Request $request)
-     {
-         $data = self::attributes($request);
-         $data_rules = self::rules();
- 
-         $validator = Validator::make($data , $data_rules);
-         return $validator->fails() ? $validator : $data;
-     }
+    static private function ValidateData(Request $request)
+    {
+        $data = self::attributes($request);
+        $data_rules = self::rules();
+
+        $validator = Validator::make($data , $data_rules);
+        return $validator->fails() ? $validator : $data;
+    }
 }

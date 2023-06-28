@@ -51,20 +51,19 @@ class UpdateUser
         ];
     }
 
-     //get Customized messages
-     static private function messages($validator)
-     {
-         $validator->after(function($validator)
-         {
-             $roles = $validator->getData()["roles"];
-             if(in_array(Role::IS_SET_ADMIN , $roles))
-             {
-                 $key = array_search(Role::IS_SET_ADMIN , $roles);
-                 $validator->errors()->add('roles.'.$key , __('messages.ErrorAdmin'));
-             }
-         });
-         return $validator;
-     }
+    //get Customized messages
+    static private function CustomizedMsgErrorAdmin($validator)
+    {
+        $validator->after(function($validator)
+        {
+            $roles = $validator->getData()["roles"];
+            if(in_array(Role::IS_SET_ADMIN , $roles))
+            {
+                $key = array_search(Role::IS_SET_ADMIN , $roles);
+                $validator->errors()->add('roles.'.$key , __('messages.ErrorAdmin'));
+            }
+        });
+    }
 
     // Validate data
     static private function ValidateData(Request $request)
@@ -72,7 +71,7 @@ class UpdateUser
         $data = self::attributes($request);
         $data_rules = self::rules();
         $validator = Validator::make($data , $data_rules);
-        $validator = self::messages($validator);
+        self::CustomizedMsgErrorAdmin($validator);
         
         return $validator->fails() ? $validator : $data ;
     }
