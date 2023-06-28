@@ -48,12 +48,9 @@ class StoreUser
         ];
     }
 
-    // Validate data
-    static private function ValidateData(Request $request)
+    //get Customized messages
+    static private function messages($validator)
     {
-        $data = self::attributes($request);
-        $data_rules = self::rules();
-        $validator = Validator::make($data , $data_rules);
         $validator->after(function($validator)
         {
             $roles = $validator->getData()["roles"];
@@ -63,6 +60,16 @@ class StoreUser
                 $validator->errors()->add('roles.'.$key , __('messages.ErrorAdmin'));
             }
         });
+        return $validator;
+    }
+
+    // Validate data
+    static private function ValidateData(Request $request)
+    {
+        $data = self::attributes($request);
+        $data_rules = self::rules();
+        $validator = Validator::make($data , $data_rules);
+        $validator = self::messages($validator);
 
         return $validator->fails() ? $validator : $data ;
     }
