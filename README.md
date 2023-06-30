@@ -121,7 +121,20 @@ Follow the steps below to clone and run your Laravel application:
 
     12.If you want to test this application  , run this command : php artisan test --env=test
 
+    13. To generate a report test coverage in html add first :: 
 
+; XDEBUG Extension
+[xdebug]
+zend_extension="c:/wamp64/bin/php/php7.4.33/zend_ext/php_xdebug-3.1.5-7.4-vc15-x86_64.dll"
+;xdebug.mode allowed are : off develop coverage debug gcstats profile trace
+xdebug.mode =debug,coverage
+xdebug.client_host=127.0.0.1
+xdebug.client_port=9000
+
+
+And then run : 
+
+vendor/bin/phpunit --coverage-html report
 
 
 
