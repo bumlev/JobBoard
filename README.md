@@ -119,7 +119,12 @@ Follow the steps below to clone and run your Laravel application:
     11. This the Link of the API Documentation : 
     https://documenter.getpostman.com/view/27278225/2s93eZxWqB#7b3a595f-60fe-4814-9ada-55f79f4cc2cc
 
-    12.If you want to test this application  , run this command : php artisan test --env=test
+    12.If you want to test this application  , run this command : php artisan test --env=test 
+
+
+    13. To geet test coverage , run the following command and it will saved under public/report
+
+    php artisan test --env=test  --coverage-html report
 
 
 
