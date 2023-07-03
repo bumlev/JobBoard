@@ -209,7 +209,7 @@ return [
     |
     */
 
-    'throttling' => [
+    /*'throttling' => [
         'model' => 'Cartalyst\Sentinel\Throttling\EloquentThrottle',
 
         'global' => [
@@ -236,6 +236,6 @@ return [
 
             'thresholds' => 5,
         ],
-    ],
+    ],*/
 
 ];

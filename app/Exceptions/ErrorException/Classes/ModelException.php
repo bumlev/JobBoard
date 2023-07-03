@@ -1,12 +1,12 @@
 <?php
 namespace App\Exceptions\ErrorException\classes;
 
-class MethodErrorException
+class ModelException
 {
     static public function execute()
     {
-        $errorMessage = __("messages.MethodException");
-        $errorCode = 405;
+        $errorMessage = __("messages.ModelException");
+        $errorCode = 404;
         return response()->json([
             'error' => $errorMessage,
             'code' => $errorCode,

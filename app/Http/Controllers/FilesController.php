@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Repositories\FilesCtrlRepos\GetSoredImage\Classes\GetSoredImage;
+use App\Repositories\FilesCtrlRepos\GetStoredImage\Classes\GetStoredImage;
 
 class FilesController extends Controller
 {
    // Get a stored Image
     public function getStoredImage($imageName)
     {
-        $response = GetSoredImage::execute($imageName);
+        $response = GetStoredImage::execute($imageName);
         return $response;
     }
 }

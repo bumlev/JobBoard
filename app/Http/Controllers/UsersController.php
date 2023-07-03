@@ -24,7 +24,7 @@ class UsersController extends Controller
     }
 
     // Update a user 
-    public function update(Request $request )
+    public function update(Request $request)
     {
         $user = UpdateUser::execute($request);
         return $user;

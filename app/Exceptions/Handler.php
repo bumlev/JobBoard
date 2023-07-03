@@ -3,12 +3,16 @@
 namespace App\Exceptions;
 
 use App\Exceptions\ErrorException\classes\MethodErrorException;
+use App\Exceptions\ErrorException\classes\ModelException;
+use App\Exceptions\ErrorException\classes\NotHttpException;
 use App\Exceptions\ErrorException\classes\QueryErrorException;
 
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Database\QueryException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Throwable;
 
 class Handler extends ExceptionHandler
@@ -48,12 +52,26 @@ class Handler extends ExceptionHandler
     
     public function render($request, Throwable $e)
     {
+        // Error when Database is not connected
         if($e instanceof QueryException)
         {
             return  QueryErrorException::execute();
+
+        // Error when Method of a route is imcompatible with method of a Model
         }else if($e instanceof MethodNotAllowedHttpException)
         {
             return MethodErrorException::execute();
+
+        // Error when the endpoint is not found or doesn't exist
+        }else if($e instanceof NotFoundHttpException) 
+        {
+            return NotHttpException::execute();
+
+         //Error when the Model is not found 
+        }else if($e instanceof ModelNotFoundException)
+        {
+            return ModelException::execute();
         }
+
     }
 }

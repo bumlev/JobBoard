@@ -26,15 +26,9 @@ class ProfileControllerTest extends TestCase
         $dataProfile = Profile::factory()->make()->toArray();
         $dataProfile["skills"] = ['10' , '11' , '8'];
 
-        $cv = $dataProfile["cv"];
-        $cover_letter = $dataProfile["cover_letter"];
-        $keystoRemove = ["cv" , "cover_letter"];
-        $dataProfile = array_diff_key($dataProfile , array_flip($keystoRemove));
-       
-
         $request = Request::create("/createProfile" , "POST" , $dataProfile);
         $request->headers->set('Content-Type' , 'multipart/form-data');
-        $request->files->add(['cv' => $cv , 'cover_letter' => $cover_letter]);
+        $request->files->add(['cv' => $dataProfile["cv"] , 'cover_letter' => $dataProfile["cover_letter"]]);
 
         $jobSeekersController  = new JobSeekersController();
         $profile = $jobSeekersController->createProfile($request);
@@ -55,14 +49,10 @@ class ProfileControllerTest extends TestCase
 
         $dataProfile = Profile::factory()->make()->toArray();
         $dataProfile["skills"] = ['10' , '' , '8'];
-        $cv = $dataProfile["cv"];
-        $cover_letter = $dataProfile["cover_letter"];
-        $keystoRemove = ["cv" , "cover_letter"];
-        $dataProfile = array_diff_key($dataProfile , array_flip($keystoRemove));
 
         $request = Request::create("/createProfile" , "POST" , $dataProfile);
         $request->headers->set('Content-Type' , 'multipart/form-data');
-        $request->files->add(['cv' => $cv , 'cover_letter' => $cover_letter]);
+        $request->files->add(['cv' => $dataProfile["cv"] , 'cover_letter' => $dataProfile["cover_letter"]]);
 
         $jobSeekersController  = new JobSeekersController();
         $profile = $jobSeekersController->createProfile($request);
@@ -80,15 +70,10 @@ class ProfileControllerTest extends TestCase
         $dataProfile = Profile::factory()->make()->toArray();
         $dataProfile["level"] = $dataProfile["degree_id"];
         $dataProfile["skills"] = ['10' , '11' , '8'];
-        $cv = $dataProfile["cv"]; 
-
-        $cover_letter = $dataProfile["cover_letter"];
-        $keystoRemove = ["cv" , "cover_letter"];
-        $dataProfile = array_diff_key($dataProfile , array_flip($keystoRemove));
 
         $request = Request::create("/createProfile" , "POST" , $dataProfile);
         $request->headers->set('Content-Type' , 'multipart/form-data');
-        $request->files->add(['cv' => $cv , 'cover_letter' => $cover_letter]);
+        $request->files->add(['cv' => $dataProfile["cv"] , 'cover_letter' => $dataProfile["cover_letter"]]);
 
         $jobSeekersController  = new JobSeekersController();
         $profile = $jobSeekersController->createProfile($request);
@@ -119,11 +104,7 @@ class ProfileControllerTest extends TestCase
     public function get_a_profile()
     {
         $recruitersController =  new RecruitersController();
-        $profile = $recruitersController->getProfile(0);
-
-        if(!empty($profile))
-            $this->assertEquals($profile->id , 2);
-        else
-            $this->assertNull($profile);
+        $profile = $recruitersController->getProfile(2);
+        $this->assertTrue(property_exists($profile , "data"));
     }
 }

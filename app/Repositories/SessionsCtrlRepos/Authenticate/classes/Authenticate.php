@@ -13,6 +13,6 @@ class Authenticate
         ];
         
         $authenticate = Sentinel::authenticate($data); 
-        return $authenticate ? $authenticate : response()->json(['errorLogin' => __('messages.errorLogin')]);
+        return $authenticate ? $authenticate : response()->json(['errorLogin' => __('messages.errorLogin')] , 401);
     }
 }

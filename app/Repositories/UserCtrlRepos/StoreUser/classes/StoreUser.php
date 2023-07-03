@@ -44,7 +44,8 @@ class StoreUser
             "password" => "Required|Min:6",
             "first_name" => "Required|Min:3",
             "last_name" => "Required|Min:3",
-            "roles.*" => ["required", "numeric" , Rule::notIn([0 , Role::IS_SET_ADMIN])],
+            "roles" => "Required",
+            "roles.*" => ["Required" , "numeric" , Rule::notIn([0 , Role::IS_SET_ADMIN])],
         ];
     }
 

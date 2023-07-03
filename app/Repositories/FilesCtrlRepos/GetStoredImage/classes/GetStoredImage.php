@@ -1,10 +1,10 @@
 <?php
-namespace App\Repositories\FilesCtrlRepos\GetSoredImage\Classes;
+namespace App\Repositories\FilesCtrlRepos\GetStoredImage\classes;
 
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\Facades\Image;
 
-class GetSoredImage
+class GetStoredImage
 {
     static public function execute($imageName)
     {
