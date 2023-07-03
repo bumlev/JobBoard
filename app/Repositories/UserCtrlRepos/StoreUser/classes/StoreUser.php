@@ -3,6 +3,7 @@ namespace App\Repositories\UserCtrlRepos\StoreUser\Classes;
 
 use App\Models\Role;
 use Cartalyst\Sentinel\Laravel\Facades\Sentinel;
+use ErrorException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
@@ -26,13 +27,12 @@ class StoreUser
     //Get attributes for data Validation
     static private function attributes(Request $request):array
     {
-        $roles = array_map("intval" , $request->input("roles"));
         return [
             "email" => $request->input("email"),
             "password" => $request->input("password"),
             "first_name" => $request->input("first_name"),
             "last_name" => $request->input("last_name"),
-            "roles" => $roles
+            "roles" => $request->input("roles"),
         ];
     }
 
@@ -54,12 +54,32 @@ class StoreUser
     {
         $data = self::attributes($request);
         $data_rules = self::rules();
+
         $customized_data = [
-            "roles.*.not_in" => in_array(Role::IS_SET_ADMIN , $data["roles"]) ? __('messages.ErrorAdmin') : 
+            "roles.*.not_in" => $request->input("roles") ? __('messages.ErrorAdmin') : 
             __("validation.not_in")
         ];
 
-        $validator = Validator::make($data , $data_rules , $customized_data);
+        $validator = Validator::make($data , $data_rules , $customized_data)
+        ->after(function($validator) use($request , $data){
+            if(count($request->all()) !== count($data))
+            {
+                $keys = array_keys(array_diff_key($request->all() , $data));
+                foreach($keys as $key){
+                    $validator->errors()->add($key, "This Key $key is not included");
+                }
+            }
+
+            $keys = array_keys($data["roles"]);
+            try
+            {
+                foreach($keys as $key)if(!is_numeric($key))
+                {
+                    $validator->errors()->add("roles", "The key ".$key." in roles must be a number.");
+                }
+            }catch(ErrorException $e){}
+
+        });
         return $validator->fails() ? $validator : $data ;
     }
 }

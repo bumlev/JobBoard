@@ -28,13 +28,12 @@ class UpdateUser
     //Get attributes for data Validation
     static private function attributes(Request $request):array
     {
-        $roles = array_map("intval" , $request->input("roles"));
         return [
             "email" => $request->input("email"),
             "password" => $request->input("password"),
             "first_name" => $request->input("first_name"),
             "last_name" => $request->input("last_name"),
-            "roles" => $roles
+            "roles" => $request->input("roles")
         ];
     }
 
@@ -47,6 +46,7 @@ class UpdateUser
             "password" => "Required|Min:6",
             "first_name" => "Required|Min:3",
             "last_name" => "Required|Min:3",
+            "roles" => "Required|array",
             "roles.*" => ["required", "numeric" , Rule::notIn([0 , Role::IS_SET_ADMIN])],
         ];
     }

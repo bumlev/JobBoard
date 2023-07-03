@@ -5,7 +5,7 @@ return [
     "AuthError"=>"You are not logged in!!",
     'AuthorizationError' => 'You are not authorized to access this page...',
     "AuthorizationRole" => "As a ",
-    "ErrorAdmin" => "you are not allowed to set yourself as admin",
+    "ErrorAdmin" => "you are not allowed to set yourself as admin or set an invalid number ...",
     'errorLogin' => "Your password or email is incorrect",
     'logout'=>"Logged out",
     "ModelException" =>"Model is not found ...",

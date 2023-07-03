@@ -5,7 +5,7 @@ return [
     "AuthError"=> "Vous n'êtes pas connecté!!",
     'AuthorizationError' => "Vous n'êtes pas autorisé à accéder à cette page...",
     "AuthorizationRole" => "En tant que ",
-    "ErrorAdmin" => "vous n'êtes pas autorisé à vous définir comme administrateur",
+    "ErrorAdmin" => "vous n'êtes pas autorisé à vous définir comme administrateur ou à inserer un chiffre invalide",
     'errorLogin' => "Votre mot de passe ou email est incorrect",
     'logout'=>"Déconnecté",
     "MethodException" => "Méthode non autorisée pour ta requete", 

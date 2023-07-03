@@ -8,7 +8,6 @@ use Illuminate\Http\Request;
 
 class UsersController extends Controller
 {
-    
     //Display all Users
     public function index()
     {
