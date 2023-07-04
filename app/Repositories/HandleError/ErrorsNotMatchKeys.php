@@ -3,7 +3,7 @@ namespace App\Repositories\HandleError;
 
 use Illuminate\Http\Request;
 
-class ErrorMatchKeys
+class ErrorsNotMatchKeys
 {
     static function execute(Request $request , $data , $validator)
     {

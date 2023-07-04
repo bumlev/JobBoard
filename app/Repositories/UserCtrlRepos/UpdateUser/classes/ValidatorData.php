@@ -1,8 +1,8 @@
 <?php
 namespace App\Repositories\UserCtrlRepos\UpdateUser\Classes;
 
-use App\Repositories\HandleError\ErrorArrays;
-use App\Repositories\HandleError\ErrorMatchKeys;
+use App\Repositories\HandleError\ErrorsNotMatchKeys;
+use App\Repositories\HandleError\ErrorsNotNumberKeys;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -21,11 +21,11 @@ class ValidatorData
         $validator = Validator::make($data , $data_rules , $customized_data)
         ->after(function($validator) use($request , $data){
 
-            // Check if keys of request match to keys of defined attributes
-            ErrorMatchKeys::execute($request , $data , $validator);
+            //Add errors message if keys of request don't match to keys of defined attributes
+            ErrorsNotMatchKeys::execute($request , $data , $validator);
 
-            // check if data role's keys are not letters
-            ErrorArrays::execute($data["roles"] , $validator);
+            //Add errors message if data role's keys are not numbers
+            ErrorsNotNumberKeys::execute($data["roles"] , $validator);
         });
         return $validator->fails() ? $validator : $data ;
     }

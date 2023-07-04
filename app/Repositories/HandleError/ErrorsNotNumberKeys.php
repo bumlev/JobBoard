@@ -1,17 +1,19 @@
 <?php
 namespace App\Repositories\HandleError;
 
-class ErrorArrays
+use ErrorException;
+
+class ErrorsNotNumberKeys
 {
     static function execute($arrays , $validator)
     {
-        if(isset($arrays) && gettype($arrays== "array"))
+        try
         {
             $keys = array_keys($arrays);
             foreach($keys as $key)if(!is_numeric($key))
             {
-                $validator->errors()->add("roles",  __("messages.Key").$key.__("messages.BeNumber"));
+                $validator->errors()->add($key,  __("messages.Key").$key.__("messages.BeNumber"));
             }
-        }
+        }catch(ErrorException $e){}
     }
 }

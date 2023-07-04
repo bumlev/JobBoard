@@ -68,7 +68,7 @@ class ProfileControllerTest extends TestCase
         $this->post("/authenticate" , ["email" => $user->email, "password" => $data['password']]);
        
         $dataProfile = Profile::factory()->make()->toArray();
-        $dataProfile["level"] = $dataProfile["degree_id"];
+        //$dataProfile["level"] = $dataProfile["degree_id"];
         $dataProfile["skills"] = ['10' , '11' , '8'];
 
         $request = Request::create("/createProfile" , "POST" , $dataProfile);
