@@ -3,6 +3,7 @@ namespace App\Repositories\RecruitersCtrlRepos\ChatWithCandidate\Classes;
 
 use App\Models\Conversation;
 use App\Models\Message;
+use App\Repositories\HandleError\ErrorsNotMatchKeys;
 use Cartalyst\Sentinel\Laravel\Facades\Sentinel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -32,32 +33,12 @@ class ChatWithCandidate
     // Create a conversation
     static private function createChat($data)
     {
-        $conversation = Conversation::where("sender_id" , $data["sender_id"])
-                                    ->where("receiver_id" , $data["receiver_id"])->first();
-        if(empty($conversation))
-        {
-            $conversation = Conversation::create($data);
-            return $conversation;
-        }
-        else
-        {
-            return Conversation::with("messages")->find($conversation->id);
-        }
+       return CreateChat::execute($data);
     }
 
     // Validate data chat 
     static private function ValidateDataChat(Request $request)
     {
-        $data = [
-            "receiver_id" => intval($request->input("receiver")),
-            "content" => $request->input("content")
-        ];
-        
-        $data_rules = [
-            "receiver_id" => "Required|numeric|not_in:0",
-            "content" => "Required"
-        ];
-        $dataValidator = Validator::make($data , $data_rules); 
-        return $dataValidator->fails() ? $dataValidator : $data;
+        return ValidatorData::execute($request);
     }
 }

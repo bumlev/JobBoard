@@ -47,7 +47,7 @@ class RecruitesControllerTest extends TestCase
         $this->post("/authenticate" , ["email" => $user->email , "password"=> $dataSender["password"]]);
 
         $data=[
-            "receiver" => 2,
+            "receiver_id" => 2,
             "content" => "Hello Guy"
         ];
         $request = Request::create("/chatWithCandidate" , "POST" , $data);
@@ -71,7 +71,7 @@ class RecruitesControllerTest extends TestCase
         Conversation::create($data);
 
         $data=[
-            "receiver" => 2,
+            "receiver_id" => 2,
             "content" => "Hello Guy"
         ];
         $request = Request::create("/chatWithCandidate" , "POST" , $data);
@@ -89,7 +89,7 @@ class RecruitesControllerTest extends TestCase
         $this->post("/authenticate" , ["email" => $user->email , "password"=> $dataSender["password"]]);
 
         $data=[
-            "receiver" => 2,
+            "receiver_id" => 2,
             "content" => ""
         ];
         $request = Request::create("/chatWithCandidate" , "POST" , $data);

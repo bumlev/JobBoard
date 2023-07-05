@@ -101,6 +101,16 @@ class ProfileControllerTest extends TestCase
     }
 
     /** @test */
+    public function search_a_profile_empty_data()
+    {
+        $data = ["name" => ""];
+        $request = new Request($data);
+        $recruitersController = new RecruitersController();
+        $profiles = $recruitersController->searchProfile($request);
+        $this->assertEquals($profiles->getFormat() , ":message");
+    }
+
+    /** @test */
     public function get_a_profile()
     {
         $recruitersController =  new RecruitersController();

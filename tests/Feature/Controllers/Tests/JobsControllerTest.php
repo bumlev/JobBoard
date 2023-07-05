@@ -37,6 +37,18 @@ class JobsControllerTest extends TestCase
     }
 
     /** @test */
+    public function searchJobs_empty_data()
+    {
+        $request = new Request([
+            "country" => "Rwanda",
+        ]);
+
+        $jobSeekersController = new JobSeekersController();
+        $jobs = $jobSeekersController->searchJobs($request);
+        $this->assertEquals($jobs->getFormat() , ":message");
+    }
+
+    /** @test */
     public function postJob()
     {
         $data = User::factory()->make()->toArray();
