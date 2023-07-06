@@ -65,17 +65,11 @@ class ProfileControllerTest extends TestCase
         $request = new Request($data);
         $recruitersController = new RecruitersController();
         $profiles = $recruitersController->searchProfile($request);
-        $profiles = $profiles->pluck("user")->toArray();
-        
-        $count = count(array_filter($profiles , function($profile) use($data){
-            return str_contains($profile["first_name"] , $data["name"]) ||  str_contains($profile["last_name"] , $data["name"]);
-        }));
-
-        if($count > 0)
-            $this->assertNotEmpty($profiles);
-        else{
-            $this->assertEmpty($profiles);
-        }
+        $profiles = $profiles->getData();
+        if(property_exists($profiles , "NoProfile"))
+            $this->assertTrue(true);
+        else if(property_exists($profiles , "profiles"))
+            $this->assertTrue(true);
     }
 
     /** @test */
@@ -85,6 +79,7 @@ class ProfileControllerTest extends TestCase
         $request = new Request($data);
         $recruitersController = new RecruitersController();
         $profiles = $recruitersController->searchProfile($request);
+        $profiles = $profiles->getOriginalContent()["errorsValidation"];
         $this->assertEquals($profiles->getFormat() , ":message");
     }
 

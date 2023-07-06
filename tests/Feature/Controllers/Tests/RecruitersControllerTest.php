@@ -54,7 +54,8 @@ class RecruitesControllerTest extends TestCase
         $request = Request::create("/chatWithCandidate" , "POST" , $data);
         $recruitersController = new RecruitersController();
         $response = $recruitersController->chatWithCandidate($request);
-        $this->assertInstanceOf(Collection::class , $response);
+        $response = $response->getData()->messages;
+        $this->assertIsArray($response);
     }
 
     /** @test */
@@ -78,7 +79,8 @@ class RecruitesControllerTest extends TestCase
         $request = Request::create("/chatWithCandidate" , "POST" , $data);
         $recruitersController = new RecruitersController();
         $response = $recruitersController->chatWithCandidate($request);
-        $this->assertInstanceOf(Collection::class , $response);
+        $response = $response->getData()->messages;
+        $this->assertIsArray($response);
     }
 
     /** @test */
@@ -96,6 +98,7 @@ class RecruitesControllerTest extends TestCase
         $request = Request::create("/chatWithCandidate" , "POST" , $data);
         $recruitersController = new RecruitersController();
         $response = $recruitersController->chatWithCandidate($request);
+        $response = $response->getOriginalContent()["errorsChat"];
         $this->assertEquals($response->getFormat() , ":message");
     }
 }

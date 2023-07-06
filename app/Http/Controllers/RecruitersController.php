@@ -53,7 +53,8 @@ class RecruitersController extends Controller
     public function getProfile($id)
     {
         $profile = Profile::with("user" , "skills")->find($id);
-        return $profile ? $profile : response()->json(["NoFoundProfile" => __("messages.NoFoundProfile")] , 404);
+        return $profile ? response()->json(["Profile" => $profile])
+        : response()->json(["NoFoundProfile" => __("messages.NoFoundProfile")] , 404);
     }
 
     /// chat with a candidate

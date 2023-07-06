@@ -1,12 +1,9 @@
 <?php
 namespace App\Repositories\RecruitersCtrlRepos\ChatWithCandidate\Classes;
 
-use App\Models\Conversation;
 use App\Models\Message;
-use App\Repositories\HandleError\ErrorsNotMatchKeys;
 use Cartalyst\Sentinel\Laravel\Facades\Sentinel;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
 
 class ChatWithCandidate
 {
@@ -16,7 +13,7 @@ class ChatWithCandidate
         $data = self::ValidateDataChat($request);
         
         if(gettype($data) == "object")
-            return $data->errors();
+            return response()->json(["errorsChat" => $data->errors()] , 404);
 
         $data["sender_id"] = $currentUser->id;
         $conversation = self::createChat($data);
@@ -27,7 +24,8 @@ class ChatWithCandidate
         ];
         
         Message::create($data);
-        return Message::with("user" , "conversation")->where('conversation_id' , $conversation->id)->get();
+        $messages = Message::with("user" , "conversation")->where('conversation_id' , $conversation->id)->get();
+        return response()->json(["messages"=> $messages] , 200);
     }
 
     // Create a conversation

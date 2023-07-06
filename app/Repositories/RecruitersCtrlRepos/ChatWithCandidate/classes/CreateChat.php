@@ -16,7 +16,7 @@ class CreateChat
         }
         else
         {
-            return Conversation::with("messages")->find($conversation->id);
+            return Conversation::find($conversation->id);
         }
     }
 }
