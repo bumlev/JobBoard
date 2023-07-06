@@ -23,7 +23,7 @@ class ValidatorData
         ->after(function($dataValidator) use($request , $data){ 
             
             //Add errors message if keys of request don't match to keys of defined attributes
-            ErrorsNotMatchKeys::execute($request , $data , $dataValidator);
+            ErrorsNotMatchKeys::add($request , $data , $dataValidator);
         }); 
         return $dataValidator->fails() ? $dataValidator : $data;
     }

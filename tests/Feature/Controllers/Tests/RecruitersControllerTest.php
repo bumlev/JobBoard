@@ -26,7 +26,7 @@ class RecruitesControllerTest extends TestCase
 
         $recruitersController = new RecruitersController();
         $response = $recruitersController->postedJobs();
-        $this->assertInstanceOf(Collection::class , $response);
+        $this->assertTrue(property_exists($response , "data"));
     }
 
     /** @test */
@@ -35,6 +35,7 @@ class RecruitesControllerTest extends TestCase
         $dataJob = Job::factory()->create();
         $recruitersController = new RecruitersController();
         $response = $recruitersController->findRightCandidates($dataJob->id);
+        $response = $response->getData()->matchProfiles;
         $this->assertIsArray($response);
     }
 

@@ -5,7 +5,7 @@ use ErrorException;
 
 class ErrorsNotNumberKeys
 {
-    static function execute($arrays , $validator)
+    static function add($arrays , $validator)
     {
         try
         {

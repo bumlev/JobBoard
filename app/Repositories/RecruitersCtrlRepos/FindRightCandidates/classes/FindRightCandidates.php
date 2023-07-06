@@ -11,6 +11,6 @@ class FindRightCandidates
         $job = Job::find($job_id);
         $profiles = Profile::all();
         $matchProfiles = $job->matchProfiles($profiles);
-        return $matchProfiles;
+        return response()->json(["matchProfiles" => $matchProfiles] , 200);
     }
 }

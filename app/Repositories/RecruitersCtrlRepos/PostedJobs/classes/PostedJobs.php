@@ -11,6 +11,6 @@ class PostedJobs
         $currentUser_id = Sentinel::getUser()->id;
         $user = User::find($currentUser_id);
         $postedJobs = $user->publishedJobs;
-        return $postedJobs;
+        return response()->json(["postedJobs" => $postedJobs] ,200);
     }
 }

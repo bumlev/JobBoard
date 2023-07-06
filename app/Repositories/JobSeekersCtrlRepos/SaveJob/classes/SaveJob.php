@@ -3,6 +3,7 @@ namespace App\Repositories\JobSeekersCtrlRepos\SaveJob\Classes;
 
 use App\Models\Job;
 use App\Models\User;
+use App\Repositories\JobSeekersCtrlRepos\ApplyJob\Classes\IfNotDataOfPivotTable;
 use Cartalyst\Sentinel\Laravel\Facades\Sentinel;
 
 class SaveJob
@@ -13,22 +14,24 @@ class SaveJob
         $profile = $user->profile;
 
         if(empty(json_decode($profile)))
-            return response()->json(['NoProfile' => __('messages.NoProfile')]);
+            return response()->json(['NoProfile' => __('messages.NoProfile')] , 404);
 
         $ifNotDataPivotTable = self::ifNotDataOfPivotTable($profile , intval($job_id));
 
         if($ifNotDataPivotTable){
+
             $profile->jobs()->attach(intval($job_id), ["save" => Job::SAVE]);
-            return $profile->jobs()->where('job_id' , intval($job_id))->first();
+            $job = $profile->jobs()->where('job_id' , intval($job_id))->first();
+            return response()->json(["savejob" => $job] , 201);
+
         }else{
-            return response()->json(["savedData"=> __("messages.savedData")]);
+            return response()->json(["savedData"=> __("messages.savedData")] , 409);
         }
     }
     
     /// Check if there is a registration  of two data of pivot table
     static private function ifNotDataOfPivotTable($profile , $job_id)
     {
-        $job =$profile->jobs()->where('job_id' , $job_id)->first();
-        return is_null($job);
+        return IfNotDataOfPivotTable::execute($profile , $job_id);
     }
 }

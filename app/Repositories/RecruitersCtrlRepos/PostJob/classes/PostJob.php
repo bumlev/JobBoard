@@ -18,7 +18,7 @@ class PostJob
         $job = Job::create($data);
         $job->skills()->attach($data["skills"]);
         $job->countries()->attach($data["countries"]);
-        return $job;
+        return response()->json(["createjob" => $job] , 201);
     }
 
     // Validate data

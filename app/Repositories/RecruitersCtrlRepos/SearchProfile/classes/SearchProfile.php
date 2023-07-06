@@ -17,7 +17,7 @@ class SearchProfile
         
         ->after(function($validator) use($request , $data){   
             //Add errors message if keys of request don't match to keys of defined attributes
-            ErrorsNotMatchKeys::execute($request , $data , $validator);
+            ErrorsNotMatchKeys::add($request , $data , $validator);
         });
 
         if($validator->fails())

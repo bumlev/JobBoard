@@ -17,7 +17,8 @@ class RecruitersController extends Controller
     public function index()
     {
        $jobs = Job::with("skills" , "countries")->get();
-       return $jobs;
+       return !empty($jobs) ?  response()->json(["jobs" => $jobs] , 200) : 
+       response()->json(['NoJobs' => __("messages.NoJobs")] , 404);
     }
 
     //post a job openings

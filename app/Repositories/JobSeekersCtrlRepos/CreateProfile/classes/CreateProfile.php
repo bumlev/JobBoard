@@ -13,7 +13,7 @@ class CreateProfile
         if(gettype($data) == "object")
         {
             $errors = $data->errors();
-            return $errors;
+            return response()->json(["errorValidation" => $errors] , 404);
         } 
         $currentUser_id = Sentinel::getUser()->id;
         $currentUser = User::find($currentUser_id);
@@ -23,7 +23,7 @@ class CreateProfile
         
         $profile  = $currentUser->profile()->create($data);
         $profile->skills()->attach($data["skills"]);
-        return $profile;
+        return response()->json(["profile" => $profile] , 201);
     }
       
     // Validate data

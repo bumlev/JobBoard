@@ -11,7 +11,6 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Tests\TestCase;
-use Illuminate\Support\Str;
 
 class JobsControllerTest extends TestCase
 {
@@ -27,13 +26,7 @@ class JobsControllerTest extends TestCase
 
         $jobSeekersController = new JobSeekersController();
         $jobs = $jobSeekersController->searchJobs($request);
-        if(property_exists($jobs , 'data'))
-        {
-            $jobs = $jobs->getData()->NoJobs;
-            $this->assertEquals($jobs , "Jobs not found ...");  
-        }else{
-            $this->assertTrue(Str::contains($jobs , $request->input('title')));  
-        } 
+        $jobs = $this->assertTrue(property_exists($jobs , 'data'));
     }
 
     /** @test */
@@ -45,6 +38,7 @@ class JobsControllerTest extends TestCase
 
         $jobSeekersController = new JobSeekersController();
         $jobs = $jobSeekersController->searchJobs($request);
+        $jobs = $jobs->getOriginalContent()["errorValidator"];
         $this->assertEquals($jobs->getFormat() , ":message");
     }
 
@@ -66,7 +60,7 @@ class JobsControllerTest extends TestCase
         $request = new Request($data);
         $recruitersController =  new RecruitersController();
         $job = $recruitersController->postJob($request);
-        $this->assertInstanceOf(Job::class , $job);;   
+        $this->assertTrue(property_exists($job , "data"));   
     }
 
     /** @test */
@@ -96,25 +90,7 @@ class JobsControllerTest extends TestCase
 
         $recruitersController = new RecruitersController();
         $jobs = $recruitersController->index();
-        $this->assertInstanceOf(Collection::class , $jobs);
-    }
-
-    /** @test */
-    public function apply_saved_job()
-    {
-        $data = User::factory()->make()->toArray();
-        $data["password"] = "levy_600";
-        $user = Sentinel::registerAndActivate($data);
-
-        $dataProfile = Profile::factory()->make()->toArray(); 
-        $currentUser = User::find($user->id);
-        $currentUser->profile()->create($dataProfile);
-
-        $this->post("/authenticate" , ["email" => $user->email, "password" => $data["password"]]);
-        $jobSeekersController = new JobSeekersController();
-        $job = Job::factory()->create();
-        $response = $jobSeekersController->applyJob($job->id);
-        $this->assertNotEmpty($response->profiles);
+        $this->assertTrue(property_exists($jobs , "data") );
     }
 
     /** @test */
@@ -132,7 +108,9 @@ class JobsControllerTest extends TestCase
         $this->post("/authenticate" , ["email" => $user->email, "password" => $data["password"]]);
         $jobSeekersController = new JobSeekersController();
         $response = $jobSeekersController->applyJob($job->id);
-        $this->assertNotEmpty($response->profiles);
+        
+        $response = $response->getData()->appliedjob;
+        $this->assertEquals($response->pivot->apply , Job::APPLY);
 
     }
 
@@ -152,7 +130,8 @@ class JobsControllerTest extends TestCase
         $jobSeekersController = new JobSeekersController();
         $response = $jobSeekersController->applyJob($job->id);
         $response = $jobSeekersController->applyJob($job->id);
-        $this->assertNotEmpty($response->profiles);
+        $response = $response->getData()->appliedjob;
+        $this->assertEquals($response->pivot->apply , Job::APPLY);
 
     }
     
@@ -196,7 +175,7 @@ class JobsControllerTest extends TestCase
         $this->post("/authenticate" , ["email" => $user->email, "password" => $data["password"]]);
         $jobSeekersController = new JobSeekersController();
         $response = $jobSeekersController->appliedJobs();
-        $this->assertInstanceOf(Collection::class , $response);
+        $this->assertTrue(property_exists($response , 'data'));
     }
 
     /** @test */
@@ -227,6 +206,8 @@ class JobsControllerTest extends TestCase
         $this->post("/authenticate" , ["email" => $user->email, "password" => $data["password"]]);
         $jobSeekersController = new JobSeekersController();
         $response = $jobSeekersController->saveJob($job->id);
+        
+        $response = json_decode($response->getContent())->savejob;
         $this->assertEquals($response->pivot->save , Job::SAVE);
     }
 

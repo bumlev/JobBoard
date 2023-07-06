@@ -14,26 +14,28 @@ class ApplyJob
         $profile = $user->profile;
 
         if(empty(json_decode($profile)))
-            return response()->json(['NoProfile' => __('messages.NoProfile')]);
+            return response()->json(['NoProfile' => __('messages.NoProfile')] , 404);
 
         $ifNotDataPivotTable = self::ifNotDataOfPivotTable($profile , intval($job_id));
 
         if($ifNotDataPivotTable){
 
             $profile->jobs()->attach(intval($job_id) , ["apply" => Job::APPLY]);
-            return $profile->jobs()->where('job_id' , intval($job_id))->first();  
+            $job = $profile->jobs()->where('job_id' , intval($job_id))->first();
+            return response()->json(["appliedjob" => $job] , 201);
+
         }else{
 
             $profile->jobs()->updateExistingPivot(intval($job_id) , ["apply" => Job::APPLY]); 
             echo __('messages.AppliedJob');
-            return $profile->jobs()->where('job_id' , intval($job_id))->first();
+            $job = $profile->jobs()->where('job_id' , intval($job_id))->first();
+            return response()->json(["appliedjob" => $job] , 200);  
         }    
     }
 
     /// Check if there is a registration  of two data of pivot table
     static private function ifNotDataOfPivotTable($profile , $job_id)
     {
-        $job =  $job =$profile->jobs()->where('job_id' , $job_id)->first();
-        return is_null($job);
+       return IfNotDataOfPivotTable::execute($profile , $job_id);
     }
 }
