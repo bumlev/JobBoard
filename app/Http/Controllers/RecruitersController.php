@@ -1,10 +1,10 @@
 <?php
 namespace App\Http\Controllers;
 
-use App\Models\Job;
-use App\Models\Profile;
+use App\Repositories\RecruitersCtrlRepos\AllJobs\classes\AllJobs;
 use App\Repositories\RecruitersCtrlRepos\ChatWithCandidate\Classes\ChatWithCandidate;
 use App\Repositories\RecruitersCtrlRepos\FindRightCandidates\Classes\FindRightCandidates;
+use App\Repositories\RecruitersCtrlRepos\GetProfile\classes\GetProfile;
 use App\Repositories\RecruitersCtrlRepos\PostedJobs\Classes\PostedJobs;
 use App\Repositories\RecruitersCtrlRepos\PostJob\Classes\PostJob;
 use App\Repositories\RecruitersCtrlRepos\SearchProfile\Classes\SearchProfile;
@@ -16,9 +16,7 @@ class RecruitersController extends Controller
     // Display all avalaible jobs
     public function index()
     {
-       $jobs = Job::with("skills" , "countries")->get();
-       return !empty($jobs) ?  response()->json(["jobs" => $jobs] , 200) : 
-       response()->json(['NoJobs' => __("messages.NoJobs")] , 404);
+       return AllJobs::execute();
     }
 
     //post a job openings
@@ -52,9 +50,7 @@ class RecruitersController extends Controller
     // Get a profile
     public function getProfile($id)
     {
-        $profile = Profile::with("user" , "skills")->find($id);
-        return $profile ? response()->json(["Profile" => $profile])
-        : response()->json(["NoFoundProfile" => __("messages.NoFoundProfile")] , 404);
+        return GetProfile::execute($id);
     }
 
     /// chat with a candidate

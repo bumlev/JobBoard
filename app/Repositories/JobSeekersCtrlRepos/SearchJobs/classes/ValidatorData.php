@@ -11,11 +11,11 @@ class ValidatorData
     {
         // Validate data 
         $data = ["country"=> $request->input("country") , "title" => $request->input("title")];
-        $data_rules = ["country"=> "Required" , "title" => "Required"];
+        $data_rules = ["country"=> "Required|string" , "title" => "Required|string"];
         
         $validator = Validator::make($data , $data_rules)
         ->after(function($validator) use($request , $data){
-            //Add errors message if keys of request don't match to keys of defined attributes
+            //Add errors messages if keys of request don't match to keys of defined attributes
             ErrorsNotMatchKeys::add($request , $data , $validator);
         });
  

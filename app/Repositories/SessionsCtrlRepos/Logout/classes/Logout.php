@@ -8,6 +8,6 @@ class Logout
     static public function execute()
     {
         Sentinel::logout();
-        return response()->json(['logout'=> __('messages.logout')]);
+        return response()->json(['logout'=> __('messages.logout')] , 200);
     }
 }

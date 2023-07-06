@@ -11,14 +11,12 @@ class SessionsController extends Controller
     // Authenticate as a User
     public function authenticate(Request $request)
     {
-       $response = Authenticate::execute($request);
-       return $response;
+       return Authenticate::execute($request);
     }
 
     // Logout
     public function logout()
     {
-       $response = Logout::execute();
-       return $response;
+       return Logout::execute();
     }
 }

@@ -9,8 +9,12 @@ class FindRightCandidates
     static public function execute($job_id)
     {
         $job = Job::find($job_id);
+        if(empty(json_decode($job)))
+            return response()->json(['NoJob' => __("messages.NoJob")] , 404);
+
         $profiles = Profile::all();
         $matchProfiles = $job->matchProfiles($profiles);
-        return response()->json(["matchProfiles" => $matchProfiles] , 200);
+        return empty($matchProfiles) ? response()->json(["NoRightCandidates" => __("messages.NoRightCandidates")] , 404) 
+        : response()->json(["matchProfiles" => $matchProfiles] , 200);
     }
 }

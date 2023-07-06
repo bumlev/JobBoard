@@ -29,6 +29,7 @@ class UsersControllerTest extends TestCase
         $request =  Request::create('/create_user' , 'POST' , $data);
         $usersController = new UsersController();
         $user = $usersController->store($request);
+        $user = $user->getOriginalContent()["errorsValidation"];
         $this->assertEquals($user->getFormat() , ":message");
     }
    
@@ -41,7 +42,7 @@ class UsersControllerTest extends TestCase
         $request =  Request::create('/create_user' , 'POST' , $data);
         $usersController = new UsersController();
         $user = $usersController->store($request);
-        $this->assertInstanceOf(UserInterface::class , $user);
+        $user = $user->getData()->createUser;
         $this->assertEquals($user->first_name , $request->input("first_name"));
     }
 
@@ -68,7 +69,8 @@ class UsersControllerTest extends TestCase
         $request = new Request($dataUser);
         $usersController = new UsersController();
         $response = $usersController->update($request , $user->id);
-        $this->assertInstanceOf(UserInterface::class , $response);
+        $response = $response->getData()->updateUser;
+        $this->assertEquals($response->email , $user->email);
     }
 
     /** @test */
@@ -86,6 +88,7 @@ class UsersControllerTest extends TestCase
         $request = new Request($dataUser);
         $usersController = new UsersController();
         $response = $usersController->update($request , $user->id);
+        $response = $response->getOriginalContent()["errorsValidation"];
         $this->assertEquals($response->getFormat() , ":message");
     }
 }

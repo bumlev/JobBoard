@@ -12,12 +12,12 @@ class StoreUser
         $data = self::ValidateData($request); 
         if(gettype($data) == "object"){
             $errors = $data->errors();
-            return $errors;
+            return response()->json(["errorsValidation" => $errors] , 422);
         }
 
         $user = Sentinel::registerAndActivate($data);
         $user->roles()->attach($data["roles"]);
-        return $user;   
+        return response()->json(["createUser" => $user] ,201);   
     }
 
     // Validate data

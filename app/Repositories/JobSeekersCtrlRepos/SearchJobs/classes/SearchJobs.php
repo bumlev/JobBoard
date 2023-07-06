@@ -10,7 +10,7 @@ class SearchJobs
     {
         $data = self::ValidateData($request);
         if(gettype($data) == "object")
-            return response()->json(["errorValidator" => $data->errors()]);
+            return response()->json(["errorValidator" => $data->errors()] , 422);
 
         // Search jobs by using country and title
         $jobs = Job::whereHas('countries' , function($query) use($data){

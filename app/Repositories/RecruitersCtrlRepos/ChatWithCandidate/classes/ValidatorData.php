@@ -16,7 +16,7 @@ class ValidatorData
         
         $data_rules = [
             "receiver_id" => "Required|numeric|not_in:0",
-            "content" => "Required"
+            "content" => "Required|string"
         ];
 
         $dataValidator = Validator::make($data , $data_rules)

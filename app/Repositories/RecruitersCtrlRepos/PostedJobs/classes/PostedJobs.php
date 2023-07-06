@@ -11,6 +11,7 @@ class PostedJobs
         $currentUser_id = Sentinel::getUser()->id;
         $user = User::find($currentUser_id);
         $postedJobs = $user->publishedJobs;
-        return response()->json(["postedJobs" => $postedJobs] ,200);
+        return $postedJobs->isEmpty() ? response()->json(["NoPostedJobs" => __("messages.NoPostedJobs")] , 404) 
+        : response()->json(["postedJobs" => $postedJobs] ,200);
     }
 }

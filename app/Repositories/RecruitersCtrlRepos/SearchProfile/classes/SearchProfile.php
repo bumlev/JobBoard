@@ -11,7 +11,7 @@ class SearchProfile
         //Validata data 
         $data = self::ValidateData($request);
         if(gettype($data) == "object")
-            return response()->json(["errorsValidation" => $data->errors()] , 404);
+            return response()->json(["errorsValidation" => $data->errors()] , 422);
 
         // search a Profile by using a name
         $profiles = Profile::with("user")

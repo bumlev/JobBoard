@@ -55,22 +55,22 @@ class Handler extends ExceptionHandler
         // Error when Database is not connected
         if($e instanceof QueryException)
         {
-            return  QueryErrorException::execute();
+            return  QueryErrorException::getMessage();
 
         // Error when Method of a route is imcompatible with method of a Model
         }else if($e instanceof MethodNotAllowedHttpException)
         {
-            return MethodErrorException::execute();
+            return MethodErrorException::getMessage();
 
         // Error when the endpoint is not found or doesn't exist
         }else if($e instanceof NotFoundHttpException) 
         {
-            return NotHttpException::execute();
+            return NotHttpException::getMessage();
 
          //Error when the Model is not found 
         }else if($e instanceof ModelNotFoundException)
         {
-            return ModelException::execute();
+            return ModelException::getMessage();
         }
 
     }

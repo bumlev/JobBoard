@@ -9,7 +9,6 @@ use App\Models\User;
 use Cartalyst\Sentinel\Laravel\Facades\Sentinel;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\Request;
-use Illuminate\Support\Collection;
 use Tests\TestCase;
 
 class JobsControllerTest extends TestCase
@@ -82,6 +81,7 @@ class JobsControllerTest extends TestCase
         $request = new Request($data);
         $recruitersController =  new RecruitersController();
         $job = $recruitersController->postJob($request);
+        $job = $job->getOriginalContent()["errorsValidation"];
         $this->assertEquals($job->getFormat() , ":message");
     }
 

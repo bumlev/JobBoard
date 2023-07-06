@@ -12,7 +12,7 @@ class PostJob
         if(gettype($data) == "object")
         {
             $errors = $data->errors();
-            return $errors;
+            return response()->json(["errorsValidation" => $errors] , 422);
         }
 
         $job = Job::create($data);

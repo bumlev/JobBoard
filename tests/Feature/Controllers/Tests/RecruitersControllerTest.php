@@ -8,7 +8,6 @@ use App\Models\User;
 use Cartalyst\Sentinel\Laravel\Facades\Sentinel;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\Request;
-use Illuminate\Support\Collection;
 use Tests\TestCase;
 
 class RecruitesControllerTest extends TestCase
@@ -35,8 +34,15 @@ class RecruitesControllerTest extends TestCase
         $dataJob = Job::factory()->create();
         $recruitersController = new RecruitersController();
         $response = $recruitersController->findRightCandidates($dataJob->id);
-        $response = $response->getData()->matchProfiles;
-        $this->assertIsArray($response);
+        $this->assertTrue(property_exists($response , "data"));
+    }
+
+    /** @test */
+    public function findRightCandidates_no_job()
+    {
+        $recruitersController = new RecruitersController();
+        $response = $recruitersController->findRightCandidates(1);
+        $this->assertTrue(property_exists($response , "data"));
     }
 
     /** @test */

@@ -10,7 +10,7 @@ class SentinelWare
 	public function handle(Request $request, Closure $next)
 	{
 		if (Sentinel::guest()) {
-			return response()->json(["AuthError"=> __("messages.AuthError")]);
+			return response()->json(["AuthError"=> __("messages.AuthError")] , 401);
 		}
 		return $next($request);
 	}

@@ -13,13 +13,13 @@ class UpdateUser
         if(gettype($data) == "object")
         {
             $errors = $data->errors();
-            return $errors;
+            return response()->json(["errorsValidation" => $errors] , 422);
         }
 
         $currentUser = Sentinel::getUser();
         Sentinel::update($currentUser , $data);
         $currentUser->roles()->sync($data["roles"]);
-        return $currentUser;
+        return response()->json(["updateUser" => $currentUser] , 200);
     }
 
     // Validate data

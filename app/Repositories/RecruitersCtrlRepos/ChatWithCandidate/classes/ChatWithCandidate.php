@@ -13,7 +13,7 @@ class ChatWithCandidate
         $data = self::ValidateDataChat($request);
         
         if(gettype($data) == "object")
-            return response()->json(["errorsChat" => $data->errors()] , 404);
+            return response()->json(["errorsChat" => $data->errors()] , 422);
 
         $data["sender_id"] = $currentUser->id;
         $conversation = self::createChat($data);

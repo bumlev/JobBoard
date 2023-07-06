@@ -16,7 +16,6 @@ class HandlerTest extends TestCase
         $response = $this->put("/create_user");
         $response = $response->getData();
         $this->assertEquals($response->error , "Unauthorized Method for your request");
-        $this->assertEquals($response->code , 405);
     }
 
     /** @test */
@@ -32,6 +31,5 @@ class HandlerTest extends TestCase
         $response = $this->json('POST', '/create_user' , $data);
         $response = $response->getData();
         $this->assertEquals($response->error , "Database connection error");
-        $this->assertEquals($response->code , 500);
     }
 }

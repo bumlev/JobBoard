@@ -13,7 +13,7 @@ class CreateProfile
         if(gettype($data) == "object")
         {
             $errors = $data->errors();
-            return response()->json(["errorValidation" => $errors] , 404);
+            return response()->json(["errorValidation" => $errors] , 422);
         } 
         $currentUser_id = Sentinel::getUser()->id;
         $currentUser = User::find($currentUser_id);

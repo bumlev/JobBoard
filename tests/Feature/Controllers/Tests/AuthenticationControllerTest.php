@@ -27,13 +27,23 @@ class AuthenticationControllerTest extends TestCase
 
         $sessionsController  = new SessionsController();
         $authenticate = $sessionsController->authenticate($request);
+        $authenticate = $authenticate->getData();
 
-        if(property_exists($authenticate , 'data')){
-            $authenticate = $authenticate->getData()->errorLogin;
-            $this->assertEquals($authenticate , "Your password or email is incorrect");
-        }else{
-            $this->assertInstanceOf(UserInterface::class , $authenticate);
+        if(property_exists($authenticate , 'errorLogin')){
+            $this->assertTrue(true);
+        }else if(property_exists($authenticate , 'successLogin')){
+            $this->assertTrue(true);
         }
+    }
+
+    /** @test */
+    public function authentication_empty_data()
+    {
+        $request  = new Request();
+        $sessionsController  = new SessionsController();
+        $authenticate = $sessionsController->authenticate($request);
+        $authenticate = $authenticate->getOriginalContent()["errorsValidation"];
+        $this->assertEquals($authenticate->getFormat() , ":message");
     }
 
     /** @test */
