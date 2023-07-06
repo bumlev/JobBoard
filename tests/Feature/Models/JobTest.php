@@ -5,6 +5,7 @@ use App\Models\Job;
 use App\Models\Profile;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -36,5 +37,13 @@ class JobTest extends TestCase
 
         $profiles = $job->matchProfiles($profiles);
         $this->assertIsArray($profiles);
+    }
+
+    /** @test */
+    public function testJobProfilesRelation()
+    {
+        $job = Job::factory()->create();
+        $relation = $job->profiles();
+        $this->assertInstanceOf(BelongsToMany::class , $relation);
     }
 }

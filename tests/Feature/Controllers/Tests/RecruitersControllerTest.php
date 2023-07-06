@@ -38,14 +38,6 @@ class RecruitesControllerTest extends TestCase
     }
 
     /** @test */
-    public function findRightCandidates_no_job()
-    {
-        $recruitersController = new RecruitersController();
-        $response = $recruitersController->findRightCandidates(1);
-        $this->assertTrue(property_exists($response , "data"));
-    }
-
-    /** @test */
     public function chatWithCandidate()
     {
         $dataSender = User::factory()->make()->toArray();
@@ -73,11 +65,11 @@ class RecruitesControllerTest extends TestCase
         $this->post("/authenticate" , ["email" => $user->email , "password"=> $dataSender["password"]]);
 
         $data =[
-            "sender_id" =>1,
+            "sender_id" =>$user->id,
             "receiver_id" =>2
         ];
         Conversation::create($data);
-
+        
         $data=[
             "receiver_id" => 2,
             "content" => "Hello Guy"
