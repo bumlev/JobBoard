@@ -13,6 +13,7 @@ return [
     'logout'=>"Déconnecté",
     "MethodException" => "Méthode non autorisée pour ta requete", 
     "ModelException" => "Le Model est introuvable ...",
+    "NoAppliedJobs" => "Les emplois appliqués sont introuvables",
     "NoJob" => "Le Job est introuvable ...",
     'NoJobs'=> "Offres d'emploi introuvables ...",
     "NoPostedJobs" => "Aucune offre d'emploi publiée trouvée ...",

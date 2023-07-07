@@ -62,8 +62,10 @@ Route::middleware("setlocale")->group(function(){
         Route::post("/postJob" , [RecruitersController::class , "postJob"])
         ->middleware("allpermissions:jobs.postJob");
 
+        Route::get("postedJobs" , [RecruitersController::class , "postedJobs"])
+        ->middleware("allpermissions:jobs.postedjobs");
+
         Route::get("/getProfile/{id}" , [RecruitersController::class , "getProfile"]);
-        Route::get("postedJobs" , [RecruitersController::class , "postedJobs"]);
         Route::post("/chatWithCandidate" , [RecruitersController::class , "chatWithCandidate"]);
         Route::post("/searchProfile" , [RecruitersController::class , "searchProfile"]);
 

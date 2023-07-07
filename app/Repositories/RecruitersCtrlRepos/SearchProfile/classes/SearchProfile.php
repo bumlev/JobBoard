@@ -20,7 +20,7 @@ class SearchProfile
                         ->orWhere("last_name", "LIKE" , '%'.$data["name"]."%");
                     })->get();
 
-        return empty(json_decode($profiles)) ? response()->json(["NoProfile" => __("messages.NoProfile")] , 404) 
+        return $profiles->isEmpty() ? response()->json(["NoFoundProfile" => __("messages.NoFoundProfile")] , 404) 
         :  response()->json(["profiles" => $profiles] , 200);
     }
 

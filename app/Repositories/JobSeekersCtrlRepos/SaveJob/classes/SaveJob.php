@@ -13,7 +13,7 @@ class SaveJob
         $user = User::with("profile")->find(Sentinel::getUser()->id);
         $profile = $user->profile;
 
-        if(empty(json_decode($profile)))
+        if(is_null($profile))
             return response()->json(['NoProfile' => __('messages.NoProfile')] , 404);
 
         $ifNotDataPivotTable = self::ifNotDataOfPivotTable($profile , intval($job_id));

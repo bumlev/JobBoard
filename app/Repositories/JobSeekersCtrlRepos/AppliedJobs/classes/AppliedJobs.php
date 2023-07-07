@@ -12,10 +12,11 @@ class AppliedJobs
         $user = User::find(Sentinel::getUser()->id);
         $profile = $user->profile;
 
-        if(empty(json_decode($profile)))
+        if(is_null($profile))
             return response()->json(['NoProfile' => __('messages.NoProfile')] , 404);
             
         $appliedJobs = $profile->jobs()->where('apply' , Job::APPLY)->get();
-        return response()->json(["appliedjobs" => $appliedJobs], 200);
+        return $appliedJobs->isEmpty() ? response()->json(["NoAppliedJobs" => __("messages.NoAppliedJobs")] , 404)
+        : response()->json(["appliedjobs" => $appliedJobs], 200);
     }
 }

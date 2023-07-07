@@ -13,6 +13,7 @@ return [
     'logout'=>"Logged out",
     "ModelException" =>"Model is not found ...",
     "MethodException" => "Unauthorized Method for your request",
+    "NoAppliedJobs" => "The applied Jobs are not found ...",
     "NoJob" => "The Job is not found ...",
     'NoJobs'=> "Jobs not found ...",
     "NoPostedJobs" => "No Posted Jobs found ...",
