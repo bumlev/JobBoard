@@ -136,6 +136,9 @@ And then run :
 
 vendor/bin/phpunit --coverage-html report
 
+# to link public and storage run this command :
+
+php artisan storage:link
 
 
 
