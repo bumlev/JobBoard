@@ -9,7 +9,6 @@ class ValidatorData
 {
     static function execute(Request $request)
     {
-        //Validate data
         $data = ["name" => $request->input("name")];
         $data_rules = ["name" => "Required"];
         
