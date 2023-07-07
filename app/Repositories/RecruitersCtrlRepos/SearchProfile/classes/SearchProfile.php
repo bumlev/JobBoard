@@ -8,12 +8,10 @@ class SearchProfile
 {
     static public function execute(Request $request)
     {
-        //Validata data 
         $data = self::ValidateData($request);
         if(gettype($data) == "object")
             return response()->json(["errorsValidation" => $data->errors()] , 422);
 
-        // search a Profile by using a name
         $profiles = Profile::with("user")
                     ->whereHas("user" , function($query) use($data){
                         $query->where("first_name", "LIKE" , '%'.$data["name"]."%")
@@ -24,6 +22,7 @@ class SearchProfile
         :  response()->json(["profiles" => $profiles] , 200);
     }
 
+    //Validata data 
     static private function ValidateData(Request $request)
     {
         return ValidatorData::execute($request);
