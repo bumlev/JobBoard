@@ -66,7 +66,7 @@ class ProfileControllerTest extends TestCase
         $recruitersController = new RecruitersController();
         $profiles = $recruitersController->searchProfile($request);
         $profiles = $profiles->getData();
-        if(property_exists($profiles , "NoProfile"))
+        if(property_exists($profiles , "NoFoundProfile"))
             $this->assertTrue(true);
         else if(property_exists($profiles , "profiles"))
             $this->assertTrue(true);
