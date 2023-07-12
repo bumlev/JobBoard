@@ -12,7 +12,6 @@ class SearchJobs
         if(gettype($data) == "object")
             return response()->json(["errorValidator" => $data->errors()] , 422);
 
-        // Search jobs by using country and title
         $jobs = Job::whereHas('countries' , function($query) use($data){
             $query->where("name" , $data["country"]);
         })->where("title" , "LIKE" , "%".$data["title"]."%")->get();

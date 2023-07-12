@@ -6,8 +6,8 @@ class Rules
     static function execute():array
     {
         return [
-            "title" => "Required|Min:5",
-            "content" => "Required",
+            "title" => "Required|string|Min:5",
+            "content" => "Required|string",
             "skills" => "Required|array",
             "skills.*" => "Required|numeric|not_in:0",
             "countries" => "Required|array",

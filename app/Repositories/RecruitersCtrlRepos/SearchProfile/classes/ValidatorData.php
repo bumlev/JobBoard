@@ -18,7 +18,6 @@ class ValidatorData
             //Add errors message if keys of request don't match to keys of defined attributes
             ErrorsNotMatchKeys::add($request , $data , $validator);
         });
-
         return $validator->fails() ? $validator : $data;
     }
 }

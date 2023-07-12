@@ -10,6 +10,7 @@ class CreateProfile
     static public function execute(Request $request)
     {
         $data  = self::ValidateData($request);
+        die;
         if(gettype($data) == "object")
         {
             $errors = $data->errors();
