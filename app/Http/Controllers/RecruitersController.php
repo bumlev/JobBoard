@@ -56,7 +56,7 @@ class RecruitersController extends Controller
     /// chat with a candidate
     public function chatWithCandidate(Request $request)
     {
-        $message = ChatWithCandidate::execute($request);
-        return $message;
+        $messages = ChatWithCandidate::execute($request);
+        return $messages;
     }
 }
