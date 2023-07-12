@@ -20,7 +20,7 @@ return [
         3,
         'Recruiter',
         'Recruiter',
-        '{"jobs.index":true,"jobs.postJob":true,"jobs.rightCandidates":true}',
+        '{"jobs.index":true,"jobs.postJob":true,"jobs.rightCandidates":true ,"jobs.postedjobs":true}',
         '2023-05-22 16:02:46',
         '2023-05-22 16:02:46',
     ],
