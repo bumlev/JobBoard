@@ -7,16 +7,9 @@ class CreateChat
 {
     static function execute($data)
     {
-        $conversation = Conversation::where("sender_id" , $data["sender_id"])
-                                    ->where("receiver_id" , $data["receiver_id"])->first();
-        if(empty($conversation))
-        {
-            $conversation = Conversation::create($data);
-            return $conversation;
-        }
-        else
-        {
-            return Conversation::find($conversation->id);
-        }
+        $conversation = Conversation::whereIn('sender_id', $data)
+                                    ->whereIn('receiver_id', $data)
+                                    ->firstOrCreate([], $data);
+        return $conversation;
     }
 }

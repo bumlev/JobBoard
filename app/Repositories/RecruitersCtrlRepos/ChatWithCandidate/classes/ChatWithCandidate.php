@@ -9,14 +9,14 @@ class ChatWithCandidate
 {
     static public function execute(Request $request)
     {
-        $currentUser = Sentinel::getUser();
         $data = self::ValidateDataChat($request);
-        
         if(gettype($data) == "object")
             return response()->json(["errorsChat" => $data->errors()] , 422);
-
+            
+        $currentUser = Sentinel::getUser();
         $data["sender_id"] = $currentUser->id;
         $conversation = self::createChat($data);
+
         $data = [
             "user_id" => $currentUser->id,
             "conversation_id" => $conversation->id,
