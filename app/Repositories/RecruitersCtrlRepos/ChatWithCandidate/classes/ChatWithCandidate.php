@@ -29,7 +29,7 @@ class ChatWithCandidate
     }
 
     // Create a conversation
-    static private function createChat($data)
+    static private function createChat(array $data)
     {
        return CreateChat::execute($data);
     }

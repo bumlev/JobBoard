@@ -5,7 +5,7 @@ use App\Models\Conversation;
 
 class CreateChat 
 {
-    static function execute($data)
+    static function execute(array $data)
     {
         $conversation = Conversation::whereIn('sender_id', $data)
                                     ->whereIn('receiver_id', $data)
