@@ -16,19 +16,19 @@ class ApplyJob
         if(is_null($profile))
             return response()->json(['NoProfile' => __('messages.NoProfile')] , 404);
 
-        $ifNotDataPivotTable = self::ifNotDataOfPivotTable($profile , intval($job_id));
+        $ifNotDataPivotTable = self::ifNotDataOfPivotTable($profile , $job_id);
 
         if($ifNotDataPivotTable){
 
-            $profile->jobs()->attach(intval($job_id) , ["apply" => Job::APPLY]);
-            $job = $profile->jobs()->where('job_id' , intval($job_id))->first();
+            $profile->jobs()->attach($job_id , ["apply" => Job::APPLY]);
+            $job = $profile->jobs()->where('job_id' , $job_id)->first();
             return response()->json(["appliedjob" => $job] , 201);
 
         }else{
 
-            $profile->jobs()->updateExistingPivot(intval($job_id) , ["apply" => Job::APPLY]); 
+            $profile->jobs()->updateExistingPivot($job_id , ["apply" => Job::APPLY]); 
             echo __('messages.AppliedJob');
-            $job = $profile->jobs()->where('job_id' , intval($job_id))->first();
+            $job = $profile->jobs()->where('job_id' , $job_id)->first();
             return response()->json(["appliedjob" => $job] , 200);  
         }    
     }

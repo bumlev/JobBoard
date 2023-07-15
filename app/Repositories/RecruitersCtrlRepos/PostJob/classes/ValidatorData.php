@@ -10,8 +10,8 @@ class ValidatorData
 {
     static function execute(Request $request)
     {
-        $data = Attributes::execute($request);
-        $data_rules = Rules::execute();
+        $data = self::attributes($request);
+        $data_rules = self::rules();
 
         $validator = Validator::make($data , $data_rules)
         ->after(function($validator) use($request , $data){
@@ -26,5 +26,18 @@ class ValidatorData
             ErrorsNotNumberKeys::add($data["countries"] , $validator);
         });
         return $validator->fails() ? $validator : $data;
+    }
+    
+
+    // Get Data attributes
+    static private function attributes(Request $request)
+    {
+        return Attributes::execute($request);
+    }
+
+    //Get Data rules
+    static private function rules()
+    {
+        return Rules::execute();
     }
 }
