@@ -1,8 +1,7 @@
 <?php
 namespace Tests\Feature\HandleErrors;
 
-use App\Repositories\HandleError\ErrorsNotMatchKeys;
-use App\Repositories\HandleError\ErrorsNotNumberKeys;
+use App\Repositories\HandleError\ArrayErrors;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Tests\TestCase;
@@ -24,7 +23,7 @@ class HandleErrorsTest extends TestCase
             "email"  => "Required",
         ];
         $validator = Validator::make($data , $data_rules);
-        ErrorsNotMatchKeys::add($request , $data , $validator);
+        ArrayErrors::NotMatchKeys($request , $data , $validator);
         $response = $validator->errors()->getFormat();
         $this->assertEquals($response , ":message");
     }
@@ -40,7 +39,7 @@ class HandleErrorsTest extends TestCase
             "roles.*"=> "Required"
         ];
         $validator = Validator::make($data , $data_rules);
-        ErrorsNotNumberKeys::add($data , $validator);
+        ArrayErrors::NotNumberKeys($data , $validator);
         $response = $validator->errors()->getFormat();
         $this->assertEquals($response , ":message");
     }
@@ -55,7 +54,7 @@ class HandleErrorsTest extends TestCase
             "roles"  => "Required"
         ];
         $validator = Validator::make($data , $data_rules);
-        ErrorsNotNumberKeys::add($data["roles"] , $validator);
+        ArrayErrors::NotNumberKeys($data["roles"] , $validator);
         $this->assertTrue($validator->errors()->isEmpty());
     }
 }

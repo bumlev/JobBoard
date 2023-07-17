@@ -1,13 +1,10 @@
 <?php
 namespace Tests\Feature\Exceptions;
 
-use App\Exceptions\ErrorException\classes\ModelException;
-use App\Exceptions\Handler;
+use App\Exceptions\ErrorException\classes\ExceptionErrors;
 use App\Models\User;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Tests\TestCase;
 
@@ -49,12 +46,11 @@ class HandlerTest extends TestCase
     /** @test */
     public function render_model_not_found()
     { 
-        $response = ModelException::getMessage();
+        $response = ExceptionErrors::getModelException();
         $this->assertInstanceOf(JsonResponse::class, $response);
         $content = $response->getData();
 
         $this->assertEquals(__('messages.ModelException'), $content->error);
-        $this->assertEquals(404, $response->getStatusCode());
-        
+        $this->assertEquals(404, $response->getStatusCode()); 
     }
 }

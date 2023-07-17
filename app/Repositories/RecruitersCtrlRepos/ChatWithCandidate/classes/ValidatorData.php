@@ -1,7 +1,7 @@
 <?php
 namespace App\Repositories\RecruitersCtrlRepos\ChatWithCandidate\Classes;
 
-use App\Repositories\HandleError\ErrorsNotMatchKeys;
+use App\Repositories\HandleError\ArrayErrors;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -23,7 +23,7 @@ class ValidatorData
         ->after(function($dataValidator) use($request , $data){ 
             
             //Add errors message if keys of request don't match to keys of defined attributes
-            ErrorsNotMatchKeys::add($request , $data , $dataValidator);
+            ArrayErrors::NotMatchKeys($request , $data , $dataValidator);
         }); 
         return $dataValidator->fails() ? $dataValidator : $data;
     }

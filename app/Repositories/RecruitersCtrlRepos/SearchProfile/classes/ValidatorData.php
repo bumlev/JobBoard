@@ -1,7 +1,7 @@
 <?php
 namespace App\Repositories\RecruitersCtrlRepos\SearchProfile\Classes;
 
-use App\Repositories\HandleError\ErrorsNotMatchKeys;
+use App\Repositories\HandleError\ArrayErrors;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -16,7 +16,7 @@ class ValidatorData
         ->after(function($validator) use($request , $data){
             
             //Add errors message if keys of request don't match to keys of defined attributes
-            ErrorsNotMatchKeys::add($request , $data , $validator);
+            ArrayErrors::NotMatchKeys($request , $data , $validator);
         });
         return $validator->fails() ? $validator : $data;
     }
