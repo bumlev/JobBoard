@@ -9,8 +9,8 @@ class ValidatorData
 {
     static function execute(Request $request)
     {
-        $data = Attributes::execute($request);
-        $data_rules = Rules::execute();
+        $data = self::attributes($request);
+        $data_rules = self::rules();
 
         $customized_data = [
             "roles.*.not_in" => $request->input("roles") ? __('messages.ErrorAdmin') : 
@@ -27,5 +27,17 @@ class ValidatorData
             ArrayErrors::NotNumberKeys($data["roles"] , $validator);
         });
         return $validator->fails() ? $validator : $data ;
+    }
+
+    //Get attributes
+    static private function attributes(Request $request)
+    {
+        return Attributes::execute($request);
+    }
+
+    //Get Rules
+    static private function rules()
+    {
+        return Rules::execute();
     }
 }
