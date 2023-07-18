@@ -9,7 +9,6 @@ class ValidatorData
 {
     static function execute(Request $request)
     {
-        // Validate data 
         $data = ["country"=> $request->input("country") , "title" => $request->input("title")];
         $data_rules = ["country"=> "Required|string" , "title" => "Required|string"];
         

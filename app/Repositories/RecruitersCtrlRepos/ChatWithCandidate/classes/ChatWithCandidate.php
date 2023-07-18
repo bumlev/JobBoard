@@ -17,14 +17,13 @@ class ChatWithCandidate
         $data["sender_id"] = $currentUser->id;
         $conversation = self::createChat($data);
 
-        $data = [
-            "user_id" => $currentUser->id,
-            "conversation_id" => $conversation->id,
-            "content" => $data["content"]
-        ];
+        $data["user_id"] = $currentUser->id;
+        $data["conversation_id"] = $conversation->id;
         
         Message::create($data);
-        $messages = Message::with("user" , "conversation")->where('conversation_id' , $conversation->id)->get();
+        $messages = Message::with("user" , "conversation")
+                            ->where('conversation_id' , $conversation->id)
+                            ->get();
         return response()->json(["messages"=> $messages] , 200);
     }
 
