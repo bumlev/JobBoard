@@ -19,7 +19,7 @@ class SearchProfile
                     })->get();
 
         return $profiles->isEmpty() 
-        ? response()->json(["NoFoundProfile" => __("messages.NoFoundProfile")] , 404) 
+        ?  response()->json(["NoFoundProfile" => __("messages.NoFoundProfile")] , 404) 
         :  response()->json(["profiles" => $profiles] , 200);
     }
 

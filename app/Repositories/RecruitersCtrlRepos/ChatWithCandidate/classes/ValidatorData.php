@@ -9,15 +9,11 @@ class ValidatorData
 {
     static function execute(Request $request)
     {
-        $data = [
-            "receiver_id" => $request->input("receiver_id"),
-            "content" => $request->input("content")
-        ];
-        
-        $data_rules = [
-            "receiver_id" => "Required|numeric|not_in:0",
-            "content" => "Required|string"
-        ];
+        $data = ["receiver_id" => $request->input("receiver_id"),
+        "content" => $request->input("content")];
+
+        $data_rules = ["receiver_id" => "Required|numeric|not_in:0",
+        "content" => "Required|string"];
 
         $dataValidator = Validator::make($data , $data_rules)
         ->after(function($dataValidator) use($request , $data){ 

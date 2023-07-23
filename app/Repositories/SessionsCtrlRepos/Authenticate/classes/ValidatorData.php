@@ -9,11 +9,11 @@ class ValidatorData
 {
     static function execute(Request $request)
     {
-        $data = [
-            "email" => $request->input("email"), 
-            "password" => $request->input("password")
-        ];
-        $data_rules = ["email" => "Required|string", "password" => "Required|string"];
+        $data = ["email" => $request->input("email"), 
+        "password" => $request->input("password")];
+
+        $data_rules = ["email" => "Required|string", 
+        "password" => "Required|string"];
 
         $validator = Validator::make($data , $data_rules)
         ->after(function($validator) use($request , $data){

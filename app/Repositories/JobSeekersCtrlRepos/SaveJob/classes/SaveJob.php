@@ -3,7 +3,6 @@ namespace App\Repositories\JobSeekersCtrlRepos\SaveJob\Classes;
 
 use App\Models\Job;
 use App\Models\User;
-use App\Repositories\JobSeekersCtrlRepos\ApplyJob\Classes\IfNotDataOfPivotTable;
 use Cartalyst\Sentinel\Laravel\Facades\Sentinel;
 
 class SaveJob

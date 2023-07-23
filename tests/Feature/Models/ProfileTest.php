@@ -1,7 +1,6 @@
 <?php
 namespace Tests\Feature\Models;
 
-use App\Models\Degree;
 use App\Models\Profile;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;

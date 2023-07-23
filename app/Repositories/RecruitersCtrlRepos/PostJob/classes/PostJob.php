@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 
 class PostJob
 {
-    static public function execute(Request $request)
+    static function execute(Request $request)
     {
         $data = self::ValidateData($request);
         if(gettype($data) == "object")

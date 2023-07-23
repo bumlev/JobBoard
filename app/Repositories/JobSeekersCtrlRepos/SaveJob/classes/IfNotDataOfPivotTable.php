@@ -1,5 +1,5 @@
 <?php
-namespace App\Repositories\JobSeekersCtrlRepos\ApplyJob\Classes;
+namespace App\Repositories\JobSeekersCtrlRepos\SaveJob\Classes;
 
 class IfNotDataOfPivotTable
 {
