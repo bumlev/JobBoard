@@ -8,7 +8,7 @@ use Cartalyst\Sentinel\Laravel\Facades\Sentinel;
 class ApplyJob
 {
 
-    static public function execute($job_id)
+    static function execute($job_id)
     {
         $user = User::find(Sentinel::getUser()->id);
         $profile = $user->profile;

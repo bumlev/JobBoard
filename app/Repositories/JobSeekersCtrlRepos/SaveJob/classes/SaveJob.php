@@ -18,11 +18,9 @@ class SaveJob
         $ifNotDataPivotTable = self::ifNotDataOfPivotTable($profile , $job_id);
 
         if($ifNotDataPivotTable){
-
             $profile->jobs()->attach($job_id, ["save" => Job::SAVE]);
             $job = $profile->jobs()->where('job_id' , $job_id)->first();
             return response()->json(["savejob" => $job] , 201);
-
         }else{
             return response()->json(["savedData"=> __("messages.savedData")] , 409);
         }
