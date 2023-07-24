@@ -15,8 +15,7 @@ class CreateProfile
             $errors = $data->errors();
             return response()->json(["errorValidation" => $errors] , 422);
         } 
-        $currentUser_id = Sentinel::getUser()->id;
-        $currentUser = User::find($currentUser_id);
+        $currentUser = User::find(Sentinel::getUser()->id);
 
         $data["cv"] = self::getUrlFile($data['cv'] , "CV");
         $data["cover_letter"] = self::getUrlFile($data['cover_letter'] , "CL");
