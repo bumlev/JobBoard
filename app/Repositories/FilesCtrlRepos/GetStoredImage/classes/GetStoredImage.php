@@ -6,14 +6,14 @@ use Intervention\Image\Facades\Image;
 
 class GetStoredImage
 {
-    static public function execute($imageName)
+    static function execute($imageName)
     {
         $imagePath = 'public/images/'.$imageName;
         $extensions = ["jpeg" , "jpg" , "png" , "gif"];
         $extension = pathinfo($imageName , PATHINFO_EXTENSION);
 
         // Check if the image exists
-        if (Storage::exists($imagePath)) {
+        if(Storage::exists($imagePath)){
 
             // Retrieve the image contents
             $imageContents = Storage::get($imagePath);

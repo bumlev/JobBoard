@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use Cartalyst\Sentinel\Users\EloquentUser;
-use Illuminate\Auth\Authenticatable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Notifications\Notifiable;
 

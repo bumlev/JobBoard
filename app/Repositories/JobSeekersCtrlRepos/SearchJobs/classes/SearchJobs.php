@@ -16,8 +16,9 @@ class SearchJobs
             $query->where("name" , $data["country"]);
         })->where("title" , "LIKE" , "%".$data["title"]."%")->get();
 
-        return $jobs->isEmpty() ? response()->json(['NoJobs'=> __("messages.NoJobs")] , 404) : 
-        response()->json(["jobs" => $jobs] , 200);
+        return $jobs->isEmpty() ? 
+        response()->json(['NoJobs'=> __("messages.NoJobs")] , 404) 
+        : response()->json(["jobs" => $jobs] , 200);
     }
 
     // Validate data
