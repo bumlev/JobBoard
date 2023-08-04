@@ -38,7 +38,7 @@ Route::middleware("setlocale")->group(function(){
     Route::get('/logout' , [SessionsController::class , "logout"]);
 
 
-//--Middleware for checking if user is authenticated-----------------//
+//---------------------------Middleware for checking if user is authenticated---------------------//
 
     Route::middleware("sentinel")->group(function(){
 
@@ -51,7 +51,7 @@ Route::middleware("setlocale")->group(function(){
         Route::put('/updateUser' , [UsersController::class , "update"]);
 
 
-//----------------------------------------Routes for Recruiters--------------------------------------------//
+//----------------------------------------Routes for Recruiters--------------------------------------//
 
         Route::get("/jobs" , [RecruitersController::class , "index"])
         ->middleware("allpermissions:jobs.index");

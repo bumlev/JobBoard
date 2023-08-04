@@ -10,7 +10,6 @@ use Illuminate\Http\Request;
 
 class JobSeekersController extends Controller
 {
-    
     // Create a profile
     public function createProfile(Request $request)
     {
