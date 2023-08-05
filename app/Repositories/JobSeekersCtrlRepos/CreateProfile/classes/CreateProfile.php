@@ -11,10 +11,8 @@ class CreateProfile
     {
         $data  = self::ValidateData($request);
         if(gettype($data) == "object")
-        {
-            $errors = $data->errors();
-            return response()->json(["errorValidation" => $errors] , 422);
-        } 
+            return response()->json(["errorValidation" => $data->errors()] , 422);
+        
         $currentUser = User::find(Sentinel::getUser()->id);
 
         $data["cv"] = self::getUrlFile($data['cv'] , "CV");
