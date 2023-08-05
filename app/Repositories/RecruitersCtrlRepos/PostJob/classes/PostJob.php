@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 
 class PostJob
 {
+    /** Post a Job */
     static function execute(Request $request)
     {
         $data = self::ValidateData($request);
@@ -18,7 +19,7 @@ class PostJob
         return response()->json(["createjob" => $job] , 201);
     }
 
-    // Validate data
+    /** Validate data  */ 
     static private function ValidateData(Request $request)
     {
         return ValidatorData::execute($request);
