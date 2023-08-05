@@ -11,10 +11,7 @@ class UpdateUser
     {
         $data = self::ValidateData($request);
         if(gettype($data) == "object")
-        {
-            $errors = $data->errors();
-            return response()->json(["errorsValidation" => $errors] , 422);
-        }
+            return response()->json(["errorsValidation" => $data->errors()] , 422);
 
         $currentUser = Sentinel::getUser();
         Sentinel::update($currentUser , $data);
