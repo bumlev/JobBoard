@@ -4,7 +4,6 @@ namespace Tests\Feature\Controllers\Tests;
 use App\Http\Controllers\UsersController;
 use App\Models\User;
 use Cartalyst\Sentinel\Laravel\Facades\Sentinel;
-use Cartalyst\Sentinel\Users\UserInterface;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
